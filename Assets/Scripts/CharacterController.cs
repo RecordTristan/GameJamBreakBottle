@@ -29,34 +29,36 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        Debug.Log(ScriptInteraction.CanMove());
         if (Input.GetKeyDown(KeyCode.Space) && ScriptInteraction.CanMove())
         {
             StartCoroutine(ScriptInteraction.Scream());
         }else if(Input.GetKeyDown(KeyCode.E)  && ScriptInteraction.GetScream() && GameController.Instance.ZoneTrigger){
             ScriptInteraction.HideMe();
-        }
-
-        if((Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)) || (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q))){
-            if ((Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)) && ScriptInteraction.CanMove())
-            {
-                if(Sens){
-                    rbChara.velocity = Vector2.zero;
-                }
-                if(rbChara.velocity.magnitude<1){
-                    rbChara.AddForce(Vector2.right*thrust*Time.deltaTime);
-                    Sens = false;
-                }
-            } 
-            if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q)) && ScriptInteraction.CanMove())
-            {
-                if(!Sens){
-                    rbChara.velocity = Vector2.zero;
-                }
-                if(rbChara.velocity.magnitude<1){
-                    rbChara.AddForce(-Vector2.right*thrust*Time.deltaTime);
-                    Sens = true;
+        }else if(ScriptInteraction.CanMove()){
+            if((Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)) || (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q))){
+                if ((Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)) && ScriptInteraction.CanMove())
+                {
+                    if(Sens){
+                        rbChara.velocity = Vector2.zero;
+                    }
+                    if(rbChara.velocity.magnitude<1){
+                        rbChara.AddForce(Vector2.right*thrust*Time.deltaTime);
+                        Sens = false;
+                    }
+                } 
+                if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q)) && ScriptInteraction.CanMove())
+                {
+                    if(!Sens){
+                        rbChara.velocity = Vector2.zero;
+                    }
+                    if(rbChara.velocity.magnitude<1){
+                        rbChara.AddForce(-Vector2.right*thrust*Time.deltaTime);
+                        Sens = true;
+                    }
                 }
             }
+            
         }else{
             rbChara.velocity = Vector2.zero;
         }
@@ -73,6 +75,13 @@ public class CharacterController : MonoBehaviour
         }else if(other.GetComponent<InteractionObject>() != null){
             CameraManager.Instance.MakeSpecialCam(Sens);
         }
+
+        if (other.GetComponent<InteractionObject>() || other.GetComponent<HideArea>()) {
+            if (other.GetComponent<InteractionObject>() != null)
+                other.GetComponent<InteractionObject>().highLight();
+            else if (other.GetComponent<HideArea>() != null)
+                other.GetComponent<HideArea>().highLight();
+        }
     }
     public void OnTriggerExit2D(Collider2D other)
     {
@@ -82,6 +91,13 @@ public class CharacterController : MonoBehaviour
             ScriptInteraction.DisactiveReduce();
         }else if(other.GetComponent<InteractionObject>() != null){
             CameraManager.Instance.StopSpecial();
+        }
+
+        if (other.GetComponent<InteractionObject>() || other.GetComponent<HideArea>()) {
+            if (other.GetComponent<InteractionObject>() != null)
+                other.GetComponent<InteractionObject>().noHighLights();
+            else if (other.GetComponent<HideArea>() != null)
+                other.GetComponent<HideArea>().noHighLights();
         }
     }
 

@@ -8,14 +8,14 @@ public class InteractionPlayer : MonoBehaviour
     private bool ScreamFinish = true;
 
     public float ReducterOfTime = 0.0001f;
-    public float MaxLightRange;
+    public Vector3 MaxLightRange;
     public float MaxRangeCollider;
 
     public float ReduceSizeStepFather = 0.005f;
 
     public GameObject LocPos;
 
-    private Light MyAnxiety;
+    private SpriteRenderer MyAnxiety;
 
     private CircleCollider2D ColliderPlayer;
     private bool ReduceCollider;
@@ -30,8 +30,8 @@ public class InteractionPlayer : MonoBehaviour
     {
         GameController.Instance.ScriptPlayer = this;
         ColliderPlayer = this.GetComponent<CircleCollider2D>();
-        MyAnxiety = this.transform.GetChild(0).GetComponent<Light>();
-        MaxLightRange = MyAnxiety.range;
+        MyAnxiety = this.transform.parent.GetChild(0).GetComponent<SpriteRenderer>();
+        MaxLightRange = MyAnxiety.transform.localScale;
         MaxRangeCollider = ColliderPlayer.radius;
     }
 
@@ -45,12 +45,13 @@ public class InteractionPlayer : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P))
         {
             ColliderPlayer.radius = MaxRangeCollider;
-            MyAnxiety.range = MaxLightRange;
+            MyAnxiety.transform.localScale = MaxLightRange;
         }
         if (!IsOnSafeArea)
         {
             ReduceCircle(ReducterOfTime);
         }
+        MyAnxiety.transform.position = this.transform.position;
     }
 
     public IEnumerator Scream()
@@ -81,11 +82,7 @@ public class InteractionPlayer : MonoBehaviour
 
     public bool CanMove()
     {
-        if(ScreamFinish && !Hiden){
-            return true;
-        }else{
-            return false;
-        }
+        return ScreamFinish && !Hiden;
     }
 
     public void HideMe(){
@@ -113,24 +110,17 @@ public class InteractionPlayer : MonoBehaviour
 
     public void ReduceCircle(float Reducter)
     {
-        ColliderPlayer.radius -= Reducter;
-        MyAnxiety.range -= Reducter*20;
+        if(MyAnxiety.transform.localPosition.x >=3.7f){
+            ColliderPlayer.radius -= Reducter;
+            MyAnxiety.transform.localScale = new Vector3(MyAnxiety.transform.localScale.x - Reducter * 20,MyAnxiety.transform.localScale.y - Reducter * 20,MyAnxiety.transform.localScale.z - Reducter * 20);
+        }
     }
     public void AugmentCircle(float Augmenter)
     {
-        if(MaxLightRange > MyAnxiety.range){
-            if(MaxLightRange < MyAnxiety.range + Augmenter*20){
-                ColliderPlayer.radius = MaxRangeCollider;
-                MyAnxiety.range = MaxLightRange;
-            }else{
-                ColliderPlayer.radius += Augmenter;
-                MyAnxiety.range += Augmenter*20;
-            }
-        }
     }
 
-    public float GetLightRange(){
-        return MyAnxiety.range;
+    public Vector3 GetLightRange(){
+        return MyAnxiety.transform.localScale;
     }
 
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HideArea : MonoBehaviour
+public class HideArea : SceneObject
 {
     // Start is called before the first frame update
     void Start()
@@ -25,5 +25,13 @@ public class HideArea : MonoBehaviour
         if(!GameController.Instance.ScriptPlayer.GetHidden()){
             GameController.Instance.ZoneTrigger = false;
         }
+    }
+
+    public override void highLight() {
+        cloneLight = Instantiate(highlight, transform.position, transform.rotation);
+    }
+
+    public override void noHighLights() {
+        Destroy(cloneLight);
     }
 }

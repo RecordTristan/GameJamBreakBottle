@@ -30,15 +30,21 @@ public class StepfatherScript : MonoBehaviour
     public bool onRound = true;
 
     public bool lookinAt = true;
+    public bool notAvailable = false;
+
+    public GameObject clone;
+    public GameObject clone1;
+    public GameObject clone2;
+    public GameObject clone3;
 
     // Start is called before the first frame update
     void Start()
     {
         GameController.Instance.StepFather = this;
         MinspdChase = spdChase;
-        GameObject clone = Instantiate(pointRound, transform.position, transform.rotation);
+        clone = Instantiate(pointRound, transform.position, transform.rotation);
         rondoPoints.Add(clone.transform.position);
-        GameObject clone1 = Instantiate(pointRound, new Vector2(transform.position.x + 10f, transform.position.y), transform.rotation);
+        clone1 = Instantiate(pointRound, new Vector2(transform.position.x + 10f, transform.position.y), transform.rotation);
         rondoPoints.Add(clone1.transform.position);
     }
 
@@ -57,20 +63,25 @@ public class StepfatherScript : MonoBehaviour
             else {
                 Debug.Log("Gé pa vu mon fisse");
                 Checker = true;
+                Destroy(clone);
+                Destroy(clone1);
+                Destroy(clone2);
+                Destroy(clone3);
                 rondoPoints.RemoveAt(1);
                 rondoPoints.RemoveAt(0);
+
                 if (lookinAt) {
                     Debug.Log("Je partir à droate");
-                    GameObject clone2 = Instantiate (pointRound, new Vector2(GoTo.x +10f, GoTo.y), transform.rotation);
-                    GameObject clone3 = Instantiate (pointRound, new Vector2(GoTo.x -10f, GoTo.y), transform.rotation);
+                    clone2 = Instantiate (pointRound, new Vector2(GoTo.x +10f, GoTo.y), transform.rotation);
+                    clone3 = Instantiate (pointRound, new Vector2(GoTo.x -10f, GoTo.y), transform.rotation);
                     rondoPoints.Add(clone2.transform.position);
                     rondoPoints.Add(clone3.transform.position);
                     roundPlace = 0;
                 }
                 else {
                     Debug.Log("Je partir à gôche");
-                    GameObject clone2 = Instantiate (pointRound, new Vector2(GoTo.x +10f, GoTo.y), transform.rotation);
-                    GameObject clone3 = Instantiate (pointRound, new Vector2(GoTo.x -10f, GoTo.y), transform.rotation);
+                    clone2 = Instantiate (pointRound, new Vector2(GoTo.x +10f, GoTo.y), transform.rotation);
+                    clone3 = Instantiate (pointRound, new Vector2(GoTo.x -10f, GoTo.y), transform.rotation);
                     rondoPoints.Add(clone3.transform.position);
                     rondoPoints.Add(clone2.transform.position);
                     roundPlace = 0;
@@ -100,6 +111,11 @@ public class StepfatherScript : MonoBehaviour
 
         // Liste des rondes ici:
         if (rondoPoints.Count > nbrRoundMax) {
+            Destroy(clone1);
+            Destroy(clone2);
+            Destroy(clone2);
+            Destroy(clone3);
+            rondoPoints.RemoveAt(1);
             rondoPoints.RemoveAt(0);
         }
 
@@ -120,7 +136,6 @@ public class StepfatherScript : MonoBehaviour
 
     public void GoChild()
     {
-        Debug.Log("Je vais voir mon fils");
         onRound = false;
         GoTo = GameController.Instance.ScriptPlayer.transform.position;
         if (this.transform.position.x < GoTo.x)
@@ -135,15 +150,17 @@ public class StepfatherScript : MonoBehaviour
             Debug.Log("Hello");
             iGoTo = true;
         }else{
-            if (other.GetComponent<InteractionObject>() != null && iGoTo && !other.GetComponent<InteractionObject>().Active) {
+            if (other.GetComponent<InteractionObject>() != null && iGoTo && !other.GetComponent<InteractionObject>().Active && !notAvailable) {
                 iGoTo = false;
+                notAvailable = true;
                 lastObj = other.gameObject;
                 GoToObj = other.transform.position;
                 iGoAct = true;
                 pauseChase = true;
                 Debug.Log("Je vais ouvrir une porte");
-            }else if (Checker && other.GetComponent<InteractionObject>() != null && !other.GetComponent<InteractionObject>().Active) {
+            }else if (Checker && other.GetComponent<InteractionObject>() != null && !other.GetComponent<InteractionObject>().Active && !notAvailable) {
                 lastObj = other.gameObject;
+                notAvailable = false;
                 GoToObj = lastObj.transform.position;
                 iGoAct = true;
                 Checker = false;
@@ -157,31 +174,13 @@ public class StepfatherScript : MonoBehaviour
 
     private void DistanceTrigger () {
         DistancePlayerFather = Vector2.Distance(transform.position,GameController.Instance.PlayerScript.transform.position);
-        if(DistancePlayerFather <= DistanceToReact){
+        if(DistancePlayerFather <= DistanceToReact && !notAvailable){
             GoChild();
             GameController.Instance.SpeedBoost();
         }
         else {
             lastSeen = GameController.Instance.PlayerScript.transform.position;
             GameController.Instance.ReduceBoost();
-           /* rondoPoints.RemoveAt(1);
-            rondoPoints.RemoveAt(0);
-            if (lookinAt) {
-                Debug.Log("droate");
-                GameObject clone4 = Instantiate (pointRound, new Vector2(lastSeen.x +10, lastSeen.y), transform.rotation);
-                GameObject clone5 = Instantiate (pointRound, new Vector2(lastSeen.x - 10, lastSeen.y), transform.rotation);
-                rondoPoints.Add(clone4.transform.position);
-                rondoPoints.Add(clone5.transform.position);
-                onRound = true;
-            }
-            else {
-                Debug.Log("gôche");
-                GameObject clone4 = Instantiate (pointRound, new Vector2(lastSeen.x - 10, lastSeen.y), transform.rotation);
-                GameObject clone5 = Instantiate (pointRound, new Vector2(lastSeen.x + 10, lastSeen.y), transform.rotation);
-                rondoPoints.Add(clone4.transform.position);
-                rondoPoints.Add(clone5.transform.position);
-                onRound = true;
-            }*/
         }
         
     }
@@ -199,6 +198,7 @@ public class StepfatherScript : MonoBehaviour
         lastObj = null;
         if (pauseChase) {
             pauseChase = false;
+            notAvailable = false;
             iGoTo = true;
         }
     }

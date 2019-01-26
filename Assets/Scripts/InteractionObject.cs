@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InteractionObject : MonoBehaviour
+public class InteractionObject : SceneObject
 {
 
     public bool Active = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,5 +21,13 @@ public class InteractionObject : MonoBehaviour
 
     public void objActive() {
         Active = true;
+    }
+
+    public override void highLight() {
+        cloneLight = Instantiate(highlight, transform.position, transform.rotation);
+    }
+
+    public override void noHighLights() {
+        Destroy(cloneLight);
     }
 }

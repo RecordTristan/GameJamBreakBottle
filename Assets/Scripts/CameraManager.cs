@@ -23,8 +23,8 @@ public class CameraManager : MonoBehaviour {
     bool ActiveSpe = false;
     // Use this for initialization
     void Start () {
-        originalPos = Camera.main.transform.localPosition;
-        Height = transform.localPosition.y;
+        Height = transform.position.y;
+        originalPos = this.transform.position;
 	}
 
     void Awake()
@@ -47,7 +47,7 @@ public class CameraManager : MonoBehaviour {
                 Shaker = false;
                 TimerShaker = 0;
                 MagnPlus = 0;
-                this.transform.localPosition = originalPos;
+                this.transform.position = originalPos;
             }
             else
             {
@@ -56,7 +56,7 @@ public class CameraManager : MonoBehaviour {
             }
         }else{
             TimerMoveCam = 0.02f;
-            transform.localPosition = Vector3.Lerp(transform.localPosition, new Vector3(GameController.Instance.ScriptPlayer.transform.localPosition.x,GameController.Instance.ScriptPlayer.transform.localPosition.y+Height,-10),TimerMoveCam);          
+            transform.position = Vector3.Lerp(transform.position, new Vector3(GameController.Instance.ScriptPlayer.transform.position.x,GameController.Instance.ScriptPlayer.transform.position.y+Height,-10),TimerMoveCam);          
         }
 	}
 
@@ -65,13 +65,13 @@ public class CameraManager : MonoBehaviour {
         float x = Random.Range(-1f, 1f) * magnitude;
         float y = Random.Range(-1f, 1f) * magnitude;
 
-        transform.localPosition = new Vector3(originalPos.x+x, originalPos.y+ y, originalPos.z);
+        transform.position = new Vector3(originalPos.x+x, originalPos.y+ y, originalPos.z);
 
     }
 
     public void ShakeTime(float myTime)
     {
-        originalPos = Camera.main.transform.localPosition;
+        originalPos = Camera.main.transform.position;
         TimerFinish = myTime;
         MagnPlus = Magnitude;
         Shaker = true;
@@ -79,14 +79,14 @@ public class CameraManager : MonoBehaviour {
 
     public void ReturnPos()
     {
-        transform.localPosition = originalPos;
+        transform.position = originalPos;
     }
 
     public void MakeSpecialCam(bool sens){
         ActiveSpe = true;
         SpecialCam = true;
         TimerMoveCam = 0;
-        originalPos = transform.localPosition;
+        originalPos = transform.position;
         if(sens){
             FuturPos = new Vector3(originalPos.x-20,originalPos.y,originalPos.z);
         }else{

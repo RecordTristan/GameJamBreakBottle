@@ -7,6 +7,9 @@ public class SoundManager : MonoBehaviour
     public static SoundManager Instance;
  
     public AudioSource CreapySound;
+    public AudioSource MusicGame;
+    public List<AudioClip> soundEffect = new List<AudioClip>();
+    public bool childWalk = false;
     void Awake()
     {
         if (Instance == null)
@@ -28,9 +31,13 @@ public class SoundManager : MonoBehaviour
     void Update()
     {
         UpdateCreapySound();
+        if (childWalk) {
+
+        }
     }
 
     void UpdateCreapySound(){
-        CreapySound.volume = Mathf.Abs(GameController.Instance.ScriptPlayer.GetLightRange()/4-1);
+        //CreapySound.volume = Mathf.Abs((GameController.Instance.ScriptPlayer.GetLightRange()-2.5f)/(GameController.Instance.ScriptPlayer.MaxLightRange-2.5f)-1);
+        //MusicGame.volume = Mathf.Abs((GameController.Instance.ScriptPlayer.GetLightRange()-2.5f)/(GameController.Instance.ScriptPlayer.MaxLightRange-2.5f)+0.3f);
     }
 }
