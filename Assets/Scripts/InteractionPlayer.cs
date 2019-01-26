@@ -110,7 +110,7 @@ public class InteractionPlayer : MonoBehaviour
 
     public void ReduceCircle(float Reducter)
     {
-        if(MyAnxiety.transform.localPosition.x >=3.7f){
+        if(MyAnxiety.transform.localScale.x >=3.7f){
             ColliderPlayer.radius -= Reducter;
             MyAnxiety.transform.localScale = new Vector3(MyAnxiety.transform.localScale.x - Reducter * 20,MyAnxiety.transform.localScale.y - Reducter * 20,MyAnxiety.transform.localScale.z - Reducter * 20);
         }

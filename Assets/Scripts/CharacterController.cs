@@ -57,6 +57,8 @@ public class CharacterController : MonoBehaviour
                         Sens = true;
                     }
                 }
+            }else{
+                rbChara.velocity = Vector2.zero;
             }
             
         }else{
