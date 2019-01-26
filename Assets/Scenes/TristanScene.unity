@@ -2131,7 +2131,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d800cfd9322cc41acea12d56fa5f27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlight: {fileID: 0}
+  highlight: {fileID: 142212385048265853, guid: ac2f415eed6e13c499da68e915e7c9c1,
+    type: 3}
   cloneLight: {fileID: 0}
 --- !u!61 &1627126668
 BoxCollider2D:

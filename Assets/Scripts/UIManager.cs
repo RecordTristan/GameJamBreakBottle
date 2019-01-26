@@ -30,6 +30,6 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //ViewBarLight.fillAmount = (GameController.Instance.ScriptPlayer.GetLightRange()-2.5f)/(GameController.Instance.ScriptPlayer.MaxLightRange-2.5f);
+        ViewBarLight.fillAmount = (GameController.Instance.ScriptPlayer.GetLightRange().magnitude)/(GameController.Instance.ScriptPlayer.MaxLightRange.magnitude);
     }
 }
