@@ -22,6 +22,7 @@ public class StepfatherScript : MonoBehaviour
     public bool iGoAct = false;
     public bool Checker = true;
     private bool pauseChase = false;
+    public float SpeedCap = 3;
 
     public List<Vector2> rondoPoints = new List<Vector2>(); 
     public bool onRound = true;
@@ -168,6 +169,7 @@ public class StepfatherScript : MonoBehaviour
         if(DistancePlayerFather <= DistanceToReact && !notAvailable && !GameController.Instance.ScriptPlayer.GetHidden()){
             SoundManager.Instance.ISpotYou();
             GoChild();
+            spdChase = SpeedCap;
             GameController.Instance.FirstCry = true;
             GameController.Instance.SpeedBoost();
         }

@@ -34,6 +34,11 @@ public class SoundManager : MonoBehaviour
         14: Scream - 4
         15: Spotted
         16: unsafe-object
+        17: Can't reach
+        18: End
+        19: Hide closet
+        20: Hide couch
+        21: Light switch on
     */
     private bool dadWalk = false;
     private bool DwalkOnPlay;
@@ -127,5 +132,25 @@ public class SoundManager : MonoBehaviour
     }
     public void DoorLook() {
         myAudio.PlayOneShot(soundEffect[7]);
+    }
+
+    public void CantReach() {
+        myAudio.PlayOneShot(soundEffect[17]);
+    }
+
+    public void TheEnd() {
+        myAudio.PlayOneShot(soundEffect[18]);
+    }
+
+    public void HideCloset() {
+        myAudio.PlayOneShot(soundEffect[19]);
+    }
+
+    public void HideCouch() {
+        myAudio.PlayOneShot(soundEffect[20]);
+    }
+
+    public void LightSwitch() {
+        myAudio.PlayOneShot(soundEffect[21]);
     }
 }

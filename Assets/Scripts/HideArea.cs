@@ -12,13 +12,17 @@ public class HideArea : SceneObject
     private bool onLights = false;
     private bool noLights = true;
     private SpriteRenderer sprAlpha;
+
+    private Animator anim;
     void Start()
     {
         highLight();
         if (this.transform.parent != null){
             sprAlpha = this.transform.parent.GetComponent<SpriteRenderer>();
         }
-            
+        if(this.GetComponent<Animator>() != null){
+            anim = this.GetComponent<Animator>();
+        }
     }
 
     // Update is called once per frame
@@ -52,6 +56,15 @@ public class HideArea : SceneObject
                 }
                 
                 
+            }
+        }
+        if(GameController.Instance.ScriptPlayer.GetHidden()){
+            if(anim != null){
+                anim.SetBool("IsHiding",true);
+            }
+        }else{
+            if(anim != null){
+                anim.SetBool("IsHiding",false);
             }
         }
     }

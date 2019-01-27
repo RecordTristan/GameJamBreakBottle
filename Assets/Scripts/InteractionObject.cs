@@ -83,6 +83,7 @@ public class InteractionObject : SceneObject
         else if (this.tag == "Switch") {
             Debug.Log("je désactive cette zone de FDP");
             linkedBadbox.SetActive(false);
+            SoundManager.Instance.LightSwitch();
         }
     }
 
