@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class GameController : MonoBehaviour
     public InteractionPlayer ScriptPlayer;
     public List<GameObject> decorDrop = new List<GameObject>();
     public StepfatherScript StepFather;
+
+    public Image fadeIn;
+    private bool fadeInActive = false;
 
     public float MaxJauge = 10;
     public float AddJauge = 2;
@@ -45,6 +49,18 @@ public class GameController : MonoBehaviour
     void Update()
     {
         ReduceAlert();
+        if (fadeInActive) {
+            Color tempColor = fadeIn.color;
+            if (tempColor.a < 1) {
+                tempColor.a = tempColor.a + Time.deltaTime;
+                fadeIn.color = tempColor;
+            }
+            else if (tempColor.a >= 1) {
+                fadeInActive = false;
+                StartCoroutine(Restart());
+            }
+            
+        }
     }
 
     public bool CanHide(){
@@ -84,13 +100,18 @@ public class GameController : MonoBehaviour
         PlayerScript.ReduceYourSpeed();
     }
 
-    public IEnumerator GameOver() {
+    public void GameOver() {
         // Player.GetComponent<Rigidbody2D>().isKinematic = true;
         PlayerScript.transform.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         PlayerScript.enabled = false;
         SoundManager.Instance.GOSound();
+        fadeInActive = true; 
+    }
+
+    public IEnumerator Restart() {
+        Scene scene = SceneManager.GetActiveScene();
         yield return new WaitForSeconds(2.1f);
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(scene.name);
     }
     // (GameController.Instance.ScriptPlayer.GetLightRange().magnitude)/(GameController.Instance.ScriptPlayer.MaxLightRange.magnitude);
 }

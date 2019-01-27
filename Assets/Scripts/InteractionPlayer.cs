@@ -130,7 +130,7 @@ public class InteractionPlayer : MonoBehaviour
             MyAnxiety.transform.localScale = new Vector3(MyAnxiety.transform.localScale.x - Reducter * 20,MyAnxiety.transform.localScale.y - Reducter * 20,MyAnxiety.transform.localScale.z - Reducter * 20);
         }
         else {
-            StartCoroutine(GameController.Instance.GameOver());
+            GameController.Instance.GameOver();
         }
         float Calcul = ColorOfObject.a + Reducter;
         if(Calcul>1){
