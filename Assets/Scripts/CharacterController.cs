@@ -14,6 +14,7 @@ public class CharacterController : MonoBehaviour
     public float thrustBase;
     public float thrustMax;
 
+    private Animator Anim;
     private bool Sens = false;
 
     
@@ -21,6 +22,7 @@ public class CharacterController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Anim = this.GetComponent<Animator>();
         GameController.Instance.PlayerScript = this;
        thrustBase = thrust;
        rbChara = this.GetComponent<Rigidbody2D>();
@@ -35,34 +37,46 @@ public class CharacterController : MonoBehaviour
             StartCoroutine(ScriptInteraction.Scream());
         }else if(Input.GetKeyDown(KeyCode.E)  && ScriptInteraction.GetScream() && GameController.Instance.ZoneTrigger){
             ScriptInteraction.HideMe();
-        }else if(ScriptInteraction.CanMove()){
+        }
+        if(ScriptInteraction.CanMove()){
             if((Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)) || (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q))){
                 if ((Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)) && ScriptInteraction.CanMove())
                 {
                     if(Sens){
                         rbChara.velocity = Vector2.zero;
+                        Anim.SetBool("Walk",false);
                     }
                     if(rbChara.velocity.magnitude<1){
                         rbChara.AddForce(Vector2.right*thrust*Time.deltaTime);
                         Sens = false;
+                        transform.localScale = new Vector3(1,1,1);
+                        SoundManager.Instance.childWalk = true;
+                        Anim.SetBool("Walk",true);
                     }
                 } 
                 if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q)) && ScriptInteraction.CanMove())
                 {
                     if(!Sens){
                         rbChara.velocity = Vector2.zero;
+                        Anim.SetBool("Walk",false);
                     }
                     if(rbChara.velocity.magnitude<1){
                         rbChara.AddForce(-Vector2.right*thrust*Time.deltaTime);
+                        transform.localScale = new Vector3(-1,1,1);
                         Sens = true;
+                        SoundManager.Instance.childWalk = true;
+                        Anim.SetBool("Walk",true);
                     }
                 }
             }else{
                 rbChara.velocity = Vector2.zero;
+                SoundManager.Instance.childWalk = false;
+                Anim.SetBool("Walk",false);
             }
             
         }else{
             rbChara.velocity = Vector2.zero;
+            Anim.SetBool("Walk",false);
         }
         
         
@@ -78,11 +92,8 @@ public class CharacterController : MonoBehaviour
             CameraManager.Instance.MakeSpecialCam(Sens);
         }
 
-        if (other.GetComponent<InteractionObject>() || other.GetComponent<HideArea>()) {
-            if (other.GetComponent<InteractionObject>() != null)
-                other.GetComponent<InteractionObject>().highLight();
-            else if (other.GetComponent<HideArea>() != null)
-                other.GetComponent<HideArea>().highLight();
+        if (other.GetComponent<SceneObject>()!= null) {
+            other.GetComponent<SceneObject>().ActiveHighLight();
         }
     }
     public void OnTriggerExit2D(Collider2D other)
@@ -92,14 +103,10 @@ public class CharacterController : MonoBehaviour
             //C'est lui
             ScriptInteraction.DisactiveReduce();
         }else if(other.GetComponent<InteractionObject>() != null){
-            CameraManager.Instance.StopSpecial();
+             CameraManager.Instance.StopSpecial();
         }
-
-        if (other.GetComponent<InteractionObject>() || other.GetComponent<HideArea>()) {
-            if (other.GetComponent<InteractionObject>() != null)
-                other.GetComponent<InteractionObject>().noHighLights();
-            else if (other.GetComponent<HideArea>() != null)
-                other.GetComponent<HideArea>().noHighLights();
+        if (other.GetComponent<SceneObject>()!= null) {
+            other.GetComponent<SceneObject>().DisactiveHighLight();
         }
     }
 

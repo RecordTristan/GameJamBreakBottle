@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
 
     public CharacterController PlayerScript;
     public InteractionPlayer ScriptPlayer;
+    public List<GameObject> decorDrop = new List<GameObject>();
     public StepfatherScript StepFather;
 
     public float MaxJauge = 10;
@@ -34,6 +35,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         
+
     }
 
     // Update is called once per frame
@@ -78,4 +80,6 @@ public class GameController : MonoBehaviour
     public void ReduceBoost(){
         PlayerScript.ReduceYourSpeed();
     }
+
+    // (GameController.Instance.ScriptPlayer.GetLightRange().magnitude)/(GameController.Instance.ScriptPlayer.MaxLightRange.magnitude);
 }

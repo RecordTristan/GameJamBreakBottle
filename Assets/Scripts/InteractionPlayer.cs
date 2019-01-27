@@ -24,6 +24,9 @@ public class InteractionPlayer : MonoBehaviour
     public float AugmentAfterScream = 1f;
 
     private bool Hiden = false;
+    public float alphaDescending = 0.05f;
+
+    public Color ColorOfObject = new Color (1f,1f,1f,0f);
 
     // Start is called before the first frame update
     void Start()
@@ -60,6 +63,7 @@ public class InteractionPlayer : MonoBehaviour
         CameraManager.Instance.ShakeTime(TimeScream);
         yield return new WaitForSeconds(TimeScream);
         GameController.Instance.AugmentAlert();
+        SoundManager.Instance.ScreamSong();
         CreatePos();
         GameController.Instance.ScriptPlayer.AugmentCircle(AugmentAfterScream);
         GameController.Instance.StepFather.onRound = false;
@@ -114,9 +118,35 @@ public class InteractionPlayer : MonoBehaviour
             ColliderPlayer.radius -= Reducter;
             MyAnxiety.transform.localScale = new Vector3(MyAnxiety.transform.localScale.x - Reducter * 20,MyAnxiety.transform.localScale.y - Reducter * 20,MyAnxiety.transform.localScale.z - Reducter * 20);
         }
+        float Calcul = ColorOfObject.a + Reducter;
+        if(Calcul>1){
+            Calcul = 1;
+        }
+        ColorOfObject = new Color(1f, 1f, 1f, ColorOfObject.a + Reducter);
+        foreach(GameObject items in GameController.Instance.decorDrop) {
+            items.GetComponent<SpriteRenderer>().color = ColorOfObject;
+        }
+        
     }
     public void AugmentCircle(float Augmenter)
     {
+        if(MyAnxiety.transform.localScale.x <= MaxLightRange.x){
+            ColliderPlayer.radius += Augmenter;
+            MyAnxiety.transform.localScale = new Vector3(MyAnxiety.transform.localScale.x + Augmenter * 20,MyAnxiety.transform.localScale.y + Augmenter * 20,MyAnxiety.transform.localScale.z + Augmenter * 20);
+        }
+        if(MyAnxiety.transform.localScale.x > MaxLightRange.x){
+            ColliderPlayer.radius = MaxRangeCollider;
+            MyAnxiety.transform.localScale = MaxLightRange;
+        }
+        float Calcul = ColorOfObject.a - Augmenter;
+        if(Calcul<0){
+            Calcul = 0;
+        }
+        ColorOfObject = new Color(1f, 1f, 1f, ColorOfObject.a - Augmenter);
+        Debug.Log(ColorOfObject);
+        foreach(GameObject items in GameController.Instance.decorDrop) {
+            items.GetComponent<SpriteRenderer>().color = ColorOfObject;
+        }
     }
 
     public Vector3 GetLightRange(){
