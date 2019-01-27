@@ -23,8 +23,8 @@ public class CameraManager : MonoBehaviour {
     bool ActiveSpe = false;
     // Use this for initialization
     void Start () {
-        Height = transform.position.y;
-        originalPos = this.transform.position;
+        Height = transform.localPosition.y;
+        originalPos = this.transform.localPosition;
 	}
 
     void Awake()

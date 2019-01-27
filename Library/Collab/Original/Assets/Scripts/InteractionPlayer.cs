@@ -26,7 +26,7 @@ public class InteractionPlayer : MonoBehaviour
     private bool Hiden = false;
     public float alphaDescending = 0.05f;
 
-    
+    public Color ColorOfObject = new Color (1f,1f,1f,0f);
 
     // Start is called before the first frame update
     void Start()
@@ -118,8 +118,13 @@ public class InteractionPlayer : MonoBehaviour
             ColliderPlayer.radius -= Reducter;
             MyAnxiety.transform.localScale = new Vector3(MyAnxiety.transform.localScale.x - Reducter * 20,MyAnxiety.transform.localScale.y - Reducter * 20,MyAnxiety.transform.localScale.z - Reducter * 20);
         }
+        float Calcul = ColorOfObject.a + Reducter;
+        if(Calcul>1){
+            Calcul = 1;
+        }
+        ColorOfObject = new Color(1f, 1f, 1f, ColorOfObject.a + Reducter);
         foreach(GameObject items in GameController.Instance.decorDrop) {
-            items.GetComponent<SpriteRenderer>().color.a -= alphaDescending;
+            items.GetComponent<SpriteRenderer>().color = ColorOfObject;
         }
         
     }
@@ -132,6 +137,14 @@ public class InteractionPlayer : MonoBehaviour
         if(MyAnxiety.transform.localScale.x > MaxLightRange.x){
             ColliderPlayer.radius = MaxRangeCollider;
             MyAnxiety.transform.localScale = MaxLightRange;
+        }
+        float Calcul = ColorOfObject.a - Augmenter;
+        if(Calcul<0){
+            Calcul = 0;
+        }
+        ColorOfObject = new Color(1f, 1f, 1f, ColorOfObject.a - Augmenter);
+        foreach(GameObject items in GameController.Instance.decorDrop) {
+            items.GetComponent<SpriteRenderer>().color = ColorOfObject;
         }
     }
 

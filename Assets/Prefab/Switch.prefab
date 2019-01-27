@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1073901422194947790}
   - component: {fileID: 1073901422194947761}
-  - component: {fileID: 1073901422194947760}
   - component: {fileID: 1073901422194947763}
+  - component: {fileID: 1073901422194947760}
   m_Layer: 0
   m_Name: Switch
   m_TagString: Switch
@@ -81,6 +81,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1073901422194947763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1073901422194947765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd168453c5791864f818f1c724f06412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Activate: 0
+  highlight: {fileID: 0}
+  cloneLight: {fileID: 0}
+  Active: 0
+  linkedBadbox: {fileID: 0}
+  Lightning: {fileID: 0}
+  Speed: 0
 --- !u!61 &1073901422194947760
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -107,19 +126,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &1073901422194947763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1073901422194947765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd168453c5791864f818f1c724f06412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlight: {fileID: 0}
-  cloneLight: {fileID: 0}
-  Active: 0
-  linkedBadbox: {fileID: 0}

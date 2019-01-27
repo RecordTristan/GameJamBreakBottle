@@ -28,7 +28,12 @@ public class SoundManager : MonoBehaviour
         8: Game Over
         9: Safe object
         10: TV sound
-        11: Scream
+        11: Scream - 1
+        12: Scream - 2
+        13: Scream - 3
+        14: Scream - 4
+        15: Spotted
+        16: unsafe-object
     */
     private bool dadWalk = false;
     private bool DwalkOnPlay;
@@ -96,14 +101,31 @@ public class SoundManager : MonoBehaviour
     }
 
     public void ScreamSong(){
-        myAudio.PlayOneShot(soundEffect[11]);
+        //myAudio.PlayOneShot(soundEffect[11]);
+        int screamTrack = Random.Range(11, 15);
+        myAudio.PlayOneShot(soundEffect[screamTrack]);
     }
 
     public void SafeSound(){
         myAudio.PlayOneShot(soundEffect[9]);
     }
 
+    public void UnsafeSound() {
+        myAudio.PlayOneShot(soundEffect[16]);
+    }
+
     public void DoorOpen(){
         myAudio.PlayOneShot(soundEffect[5]);
+    }
+
+    public void GOSound() {
+        myAudio.PlayOneShot(soundEffect[8]);
+    }
+
+    public void ISpotYou() {
+        myAudio.PlayOneShot(soundEffect[15]);
+    }
+    public void DoorLook() {
+        myAudio.PlayOneShot(soundEffect[7]);
     }
 }

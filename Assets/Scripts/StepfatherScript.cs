@@ -20,7 +20,7 @@ public class StepfatherScript : MonoBehaviour
     public GameObject gm;
     public bool iGoTo = false;
     public bool iGoAct = false;
-    public bool Checker = false;
+    public bool Checker = true;
     private bool pauseChase = false;
 
     public List<Vector2> rondoPoints = new List<Vector2>(); 
@@ -31,25 +31,27 @@ public class StepfatherScript : MonoBehaviour
     private Animator Anim;
 
     public float DistanceOfRound = 10;
-
     // Start is called before the first frame update
     void Start()
     {
         Anim = this.GetComponent<Animator>();
         GameController.Instance.StepFather = this;
         MinspdChase = spdChase;
-        rondoPoints.Add(new Vector2(transform.position.x+10,transform.position.y));
-        rondoPoints.Add(new Vector2(transform.position.x-10,transform.position.y));
+        rondoPoints.Add(new Vector2(transform.position.x+DistanceOfRound,transform.position.y));
+        rondoPoints.Add(new Vector2(transform.position.x-DistanceOfRound,transform.position.y));
     }
 
     // Update is called once per frame
     void Update()
     {
+        DistanceTrigger ();
+        if(!GameController.Instance.FirstCry)
+            return;
         if (iGoTo) {
             onRound = false;
             if (this.transform.position != GoTo) {
                 float step = spdChase * Time.deltaTime;
-                transform.position = Vector2.MoveTowards(transform.position, GoTo, step);
+                transform.position = Vector2.MoveTowards(transform.position,new Vector2(GoTo.x,transform.position.y) , step);
                 Anim.SetBool("Walk",true);
                 if(transform.position.x >GoTo.x){
                     transform.localScale = new Vector3(-1,1,1);
@@ -77,12 +79,10 @@ public class StepfatherScript : MonoBehaviour
                 iGoTo = false;
                 onRound = true;
             }
-        }
-        if (iGoAct) {
-            if (this.transform.position != GoToObj) {
-                Debug.Log("Je vais activer la porte");
+        }else if (iGoAct) {
+            if (transform.position.x != GoToObj.x) {
                 float step = spdChase * Time.deltaTime;
-                transform.position = Vector2.MoveTowards(transform.position, GoToObj, step);
+                transform.position = Vector2.MoveTowards(transform.position, new Vector2(GoToObj.x,transform.position.y), step);
                 Anim.SetBool("Walk",true);
                 if(transform.position.x >GoToObj.x){
                     transform.localScale = new Vector3(-1,1,1);
@@ -94,21 +94,10 @@ public class StepfatherScript : MonoBehaviour
                 iGoAct = false;
                 StartCoroutine(Activate());
             }
-        }
-        if (Checker) {
-            this.transform.GetChild(0).GetComponent<CircleCollider2D>().enabled = true;
-        }
-        else if (!Checker) {
-            this.transform.GetChild(0).GetComponent<CircleCollider2D>().enabled = false;
-        }
-        DistanceTrigger ();
-
-        // Liste des rondes ici:
-
-        if (onRound) {
-            if (this.transform.position.x != rondoPoints[roundPlace].x) {
+        }else if (onRound) {
+            if (this.transform.position.x != rondoPoints[roundPlace].x ) {
                 float step = spdChase * Time.deltaTime;
-                transform.position = Vector2.MoveTowards(transform.position, rondoPoints[roundPlace], step);
+                transform.position = Vector2.MoveTowards(transform.position,new Vector2(rondoPoints[roundPlace].x,transform.position.y) , step);
                 Anim.SetBool("Walk",true);
                 if(transform.position.x >rondoPoints[roundPlace].x){
                     transform.localScale = new Vector3(-1,1,1);
@@ -124,6 +113,18 @@ public class StepfatherScript : MonoBehaviour
                 }
             }
         }
+
+        if (Checker) {
+            this.transform.GetChild(0).GetComponent<CircleCollider2D>().enabled = true;
+        }
+        else if (!Checker) {
+            this.transform.GetChild(0).GetComponent<CircleCollider2D>().enabled = false;
+        }
+        DistanceTrigger ();
+
+        // Liste des rondes ici:
+
+       
     }
 
     public void GoChild()
@@ -142,6 +143,7 @@ public class StepfatherScript : MonoBehaviour
             Debug.Log("Hello");
             iGoTo = true;
         }else{
+            Debug.Log(Checker && other.GetComponent<InteractionObject>() != null);
             if (other.GetComponent<InteractionObject>() != null && iGoTo && !other.GetComponent<InteractionObject>().Active && !notAvailable) {
                 iGoTo = false;
                 notAvailable = true;
@@ -152,22 +154,21 @@ public class StepfatherScript : MonoBehaviour
                 Debug.Log("Je vais ouvrir une porte");
             }else if (Checker && other.GetComponent<InteractionObject>() != null && !other.GetComponent<InteractionObject>().Active && !notAvailable) {
                 lastObj = other.gameObject;
-                notAvailable = false;
+                notAvailable = true;
                 GoToObj = lastObj.transform.position;
                 iGoAct = true;
                 Checker = false;
+                Debug.Log("Je vais ouvrir un switch");
             }
-        }
-        //
-        if(other.tag == "Player"){
-            Debug.Log("Hello");
         }
     }
 
     private void DistanceTrigger () {
         DistancePlayerFather = Vector2.Distance(transform.position,GameController.Instance.PlayerScript.transform.position);
         if(DistancePlayerFather <= DistanceToReact && !notAvailable && !GameController.Instance.ScriptPlayer.GetHidden()){
+            SoundManager.Instance.ISpotYou();
             GoChild();
+            GameController.Instance.FirstCry = true;
             GameController.Instance.SpeedBoost();
         }
         else {
@@ -183,7 +184,6 @@ public class StepfatherScript : MonoBehaviour
     }
 
     public IEnumerator Activate() {
-        Debug.Log("OK");
         InteractionObject objScript = lastObj.GetComponent<InteractionObject>();
         Debug.Log("J'ouvre la porte");
         Anim.SetBool("Activate",true);

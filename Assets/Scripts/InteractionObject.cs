@@ -11,9 +11,15 @@ public class InteractionObject : SceneObject
     public Light Lightning;
     public float Speed;
     private float TimerLight;
-    private bool Sens = false;
+    private bool Sens = true;
 
     private Animator Anim;
+    private bool onLights = false;
+    private bool noLights = true;
+    private SpriteRenderer sprAlpha;
+
+    public string TagOfObject;
+
     void Start()
     {
         highLight();
@@ -21,30 +27,49 @@ public class InteractionObject : SceneObject
         if(GetComponent<Animator>() != null){
             Anim = GetComponent<Animator>();
         }
+        TagOfObject = this.tag;
+        if (this.transform.parent != null)
+            sprAlpha = this.transform.parent.GetComponent<SpriteRenderer>();
+        else   
+            return;
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         if(Activate){
-            if(Sens){
-                TimerLight += Speed * Time.deltaTime;
-                Lightning.intensity = Mathf.Lerp(Lightning.intensity,6,TimerLight);
-                if(Lightning.intensity <=6){
-                    Sens = false;
-                    TimerLight = 0;
+            Debug.Log("Hey");
+           if (onLights && !noLights) {
+                if(Sens){
+                    if (sprAlpha.color.a <62) {
+                        Debug.Log("Je me lumiere haute");
+                        TimerLight += Speed * Time.deltaTime;
+                        float alphaSprite = sprAlpha.color.a;
+                        alphaSprite = Mathf.Lerp(alphaSprite,1f,TimerLight);
+                        sprAlpha.color = new Color(sprAlpha.color.r,sprAlpha.color.g,sprAlpha.color.b,alphaSprite);
+                    }else{
+                        Sens = false;
+                    }
+                }else{
+                    if (sprAlpha.color.a >0) {
+                        Debug.Log("Je me lumière basse");
+                        TimerLight += Speed * Time.deltaTime;
+                        float alphaSprite = sprAlpha.color.a;
+                        alphaSprite = Mathf.Lerp(alphaSprite,0f,TimerLight);
+                        sprAlpha.color = new Color(sprAlpha.color.r,sprAlpha.color.g,sprAlpha.color.b,alphaSprite);
+                    }else{
+                        Sens = true;
+                    }
                 }
-            }else{
-                TimerLight += Speed * Time.deltaTime;
-                Lightning.intensity = Mathf.Lerp(Lightning.intensity,9,TimerLight);
-                if(Lightning.intensity >=9){
-                    Sens = true;
-                    TimerLight = 0;
-                }
+                
+                
             }
-            
-            
         }
+
+        
+        
+        
     }
 
     public void objActive() {
@@ -63,11 +88,15 @@ public class InteractionObject : SceneObject
     }
 
     public override void highLight() {
-        cloneLight = Instantiate(highlight);
+        // cloneLight = Instantiate(highlight);
+        noLights = false;
+        onLights = true;
     }
 
     public override void noHighLights() {
-        Destroy(cloneLight);
+        // Destroy(cloneLight);
+        onLights = false;
+        noLights = false;
     }
 
     public override void ActiveHighLight() {

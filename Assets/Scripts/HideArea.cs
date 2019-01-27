@@ -8,56 +8,81 @@ public class HideArea : SceneObject
     public Light Lightning;
     public float Speed;
     private float TimerLight;
-    private bool Sens = false;
+    private bool Sens = true;
+    private bool onLights = false;
+    private bool noLights = true;
+    private SpriteRenderer sprAlpha;
     void Start()
     {
         highLight();
-        Lightning = transform.GetChild(0).GetComponent<Light>();
+        if (this.transform.parent != null){
+            sprAlpha = this.transform.parent.GetComponent<SpriteRenderer>();
+        }
+            
     }
 
     // Update is called once per frame
     void Update()
     {
         if(Activate){
-            if(Sens){
-                TimerLight += Speed * Time.deltaTime;
-                Lightning.intensity = Mathf.Lerp(9,6,TimerLight);
-                if(Lightning.intensity <=6){
-                    Sens = false;
-                    TimerLight = 0;
+           if (onLights && !noLights) {
+                if(Sens){
+                    if (TimerLight < 0.1f) {
+                        Debug.Log(TimerLight);
+                        TimerLight += Speed * Time.deltaTime;
+                        float alphaSprite = sprAlpha.color.a;
+                        alphaSprite = Mathf.Lerp(alphaSprite,120f/255f,TimerLight);
+                        sprAlpha.color = new Color(sprAlpha.color.r,sprAlpha.color.g,sprAlpha.color.b,alphaSprite);
+                    }else{
+                        TimerLight=0;
+                        Sens = false;
+                        sprAlpha.color = new Color(sprAlpha.color.r,sprAlpha.color.g,sprAlpha.color.b,120f/255f);
+                    }
+                }else{
+                    if (TimerLight < 0.1f) {
+                        TimerLight += Speed * Time.deltaTime;
+                        float alphaSprite = sprAlpha.color.a;
+                        alphaSprite = Mathf.Lerp(alphaSprite,60f/255f,TimerLight);
+                        sprAlpha.color = new Color(sprAlpha.color.r,sprAlpha.color.g,sprAlpha.color.b,alphaSprite);
+                    }else{
+                        TimerLight = 0;
+                        Sens = true;
+                        sprAlpha.color = new Color(sprAlpha.color.r,sprAlpha.color.g,sprAlpha.color.b,60f/255f);
+                    }
                 }
-            }else{
-                TimerLight += Speed * Time.deltaTime;
-                Lightning.intensity = Mathf.Lerp(6,9,TimerLight);
-                if(Lightning.intensity >=9){
-                    Sens = true;
-                    TimerLight = 0;
-                }
+                
+                
             }
-            
-            
         }
     }
 
     public void OnTriggerEnter2D(Collider2D other)
     {
-        GameController.Instance.ZoneTrigger = true;
+        if(other.tag == "Player"){
+            GameController.Instance.ZoneTrigger = true;
+        }
+        
     }
     public void OnTriggerExit2D(Collider2D other)
     {
-        if(!GameController.Instance.ScriptPlayer.GetHidden()){
+        if(other.tag == "Player" && !GameController.Instance.ScriptPlayer.GetHidden()){
             GameController.Instance.ZoneTrigger = false;
+        }
+        if(other.tag=="Player"){
+            sprAlpha.color = new Color(sprAlpha.color.r,sprAlpha.color.g,sprAlpha.color.b,0f);
         }
     }
 
     public override void highLight() {
-        cloneLight = Instantiate(highlight);
-        cloneLight.transform.parent = this.transform;
-        cloneLight.transform.position = new Vector3(this.transform.position.x,this.transform.position.y,-2f);
+        // cloneLight = Instantiate(highlight);
+        noLights = false;
+        onLights = true;
     }
 
     public override void noHighLights() {
-        Destroy(cloneLight);
+        // Destroy(cloneLight);
+        onLights = false;
+        noLights = false;
     }
 
     public override void ActiveHighLight() {

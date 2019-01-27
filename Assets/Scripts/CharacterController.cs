@@ -17,7 +17,8 @@ public class CharacterController : MonoBehaviour
     private Animator Anim;
     private bool Sens = false;
 
-    
+    private GameObject ZoneTr;
+    private bool Jump = false;
 
     // Start is called before the first frame update
     void Start()
@@ -29,15 +30,33 @@ public class CharacterController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        Debug.Log(ScriptInteraction.CanMove());
+        if(Jump){
+            JumpFunc();
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.Space) && ScriptInteraction.CanMove())
         {
             StartCoroutine(ScriptInteraction.Scream());
-        }else if(Input.GetKeyDown(KeyCode.E)  && ScriptInteraction.GetScream() && GameController.Instance.ZoneTrigger){
-            ScriptInteraction.HideMe();
         }
+        if(Input.GetKeyDown(KeyCode.E)  && ScriptInteraction.GetScream() && GameController.Instance.ZoneTrigger){
+            if(ZoneTr.GetComponent<HideArea>() != null){
+                ScriptInteraction.HideMe();
+            }else{
+                if(ZoneTr.GetComponent<InteractionObject>().TagOfObject == "Door"){
+                    SoundManager.Instance.DoorLook();
+                }else{
+                    Jump = true;
+                }
+            }
+            
+        }
+    }
+    void FixedUpdate()
+    {
+        if(Jump)
+            return;
         if(ScriptInteraction.CanMove()){
             if((Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)) || (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q))){
                 if ((Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)) && ScriptInteraction.CanMove())
@@ -82,17 +101,19 @@ public class CharacterController : MonoBehaviour
         
     }
 
+    public void JumpFunc(){
+
+    }
     public void OnTriggerEnter2D(Collider2D other)
     {
         if (other.GetComponent<StepfatherScript>() != null)
         {
             //C'est lui
             ScriptInteraction.ActivateReduce();
-        }else if(other.GetComponent<InteractionObject>() != null){
-            CameraManager.Instance.MakeSpecialCam(Sens);
         }
 
         if (other.GetComponent<SceneObject>()!= null) {
+            ZoneTr = other.gameObject;
             other.GetComponent<SceneObject>().ActiveHighLight();
         }
     }
@@ -107,6 +128,11 @@ public class CharacterController : MonoBehaviour
         }
         if (other.GetComponent<SceneObject>()!= null) {
             other.GetComponent<SceneObject>().DisactiveHighLight();
+        }
+        if(ZoneTr != null){
+            if(ZoneTr == other){
+                ZoneTr = null;
+            }
         }
     }
 

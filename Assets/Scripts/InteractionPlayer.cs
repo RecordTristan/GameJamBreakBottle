@@ -62,6 +62,7 @@ public class InteractionPlayer : MonoBehaviour
         ScreamFinish = false;
         CameraManager.Instance.ShakeTime(TimeScream);
         yield return new WaitForSeconds(TimeScream);
+        GameController.Instance.FirstCry = true;
         GameController.Instance.AugmentAlert();
         SoundManager.Instance.ScreamSong();
         CreatePos();
@@ -118,6 +119,9 @@ public class InteractionPlayer : MonoBehaviour
             ColliderPlayer.radius -= Reducter;
             MyAnxiety.transform.localScale = new Vector3(MyAnxiety.transform.localScale.x - Reducter * 20,MyAnxiety.transform.localScale.y - Reducter * 20,MyAnxiety.transform.localScale.z - Reducter * 20);
         }
+        else {
+            StartCoroutine(GameController.Instance.GameOver());
+        }
         float Calcul = ColorOfObject.a + Reducter;
         if(Calcul>1){
             Calcul = 1;
@@ -143,7 +147,6 @@ public class InteractionPlayer : MonoBehaviour
             Calcul = 0;
         }
         ColorOfObject = new Color(1f, 1f, 1f, ColorOfObject.a - Augmenter);
-        Debug.Log(ColorOfObject);
         foreach(GameObject items in GameController.Instance.decorDrop) {
             items.GetComponent<SpriteRenderer>().color = ColorOfObject;
         }

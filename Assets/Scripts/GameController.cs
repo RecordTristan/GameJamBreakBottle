@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class GameController : MonoBehaviour
     public float ReduceInTime = 0.02f;
     private float JaugeAlert = 0;
 
+    public bool FirstCry = false;
+
     void Awake()
     {
         if (Instance == null)
@@ -34,7 +37,7 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        ZoneTrigger = false;
 
     }
 
@@ -81,5 +84,13 @@ public class GameController : MonoBehaviour
         PlayerScript.ReduceYourSpeed();
     }
 
+    public IEnumerator GameOver() {
+        // Player.GetComponent<Rigidbody2D>().isKinematic = true;
+        PlayerScript.transform.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+        PlayerScript.enabled = false;
+        SoundManager.Instance.GOSound();
+        yield return new WaitForSeconds(2.1f);
+        SceneManager.LoadScene("MainMenu");
+    }
     // (GameController.Instance.ScriptPlayer.GetLightRange().magnitude)/(GameController.Instance.ScriptPlayer.MaxLightRange.magnitude);
 }
