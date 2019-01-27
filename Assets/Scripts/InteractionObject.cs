@@ -15,19 +15,18 @@ public class InteractionObject : SceneObject
 
     private Animator Anim;
     private bool onLights = false;
-    private bool noLights = true;
+    private bool noLights = false;
     private SpriteRenderer sprAlpha;
 
     public string TagOfObject;
 
     void Start()
     {
-        highLight();
+        //highLight();
         Lightning = transform.GetChild(0).GetComponent<Light>();
         if(GetComponent<Animator>() != null){
             Anim = GetComponent<Animator>();
         }
-        TagOfObject = this.tag;
         if (this.transform.parent != null)
             sprAlpha = this.transform.parent.GetComponent<SpriteRenderer>();
         else   

@@ -28,6 +28,9 @@ public class InteractionPlayer : MonoBehaviour
 
     public Color ColorOfObject = new Color (1f,1f,1f,0f);
 
+    private bool ActivateScream = false;
+    private float Adder = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -55,6 +58,13 @@ public class InteractionPlayer : MonoBehaviour
             ReduceCircle(ReducterOfTime);
         }
         MyAnxiety.transform.position = this.transform.position;
+        if(ActivateScream && Adder<=AugmentAfterScream){
+            Adder += 0.02f;
+            GameController.Instance.ScriptPlayer.AugmentCircle(Adder);
+        }else{
+            ActivateScream = false;
+            Adder=0;
+        }
     }
 
     public IEnumerator Scream()
@@ -66,7 +76,6 @@ public class InteractionPlayer : MonoBehaviour
         GameController.Instance.AugmentAlert();
         SoundManager.Instance.ScreamSong();
         CreatePos();
-        GameController.Instance.ScriptPlayer.AugmentCircle(AugmentAfterScream);
         GameController.Instance.StepFather.onRound = false;
         GameController.Instance.StepFather.GoChild();
         ScreamFinish = true;

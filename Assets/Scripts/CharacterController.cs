@@ -41,12 +41,14 @@ public class CharacterController : MonoBehaviour
         {
             StartCoroutine(ScriptInteraction.Scream());
         }
-        if(Input.GetKeyDown(KeyCode.E)  && ScriptInteraction.GetScream() && GameController.Instance.ZoneTrigger){
+        if(Input.GetKeyDown(KeyCode.E)  && ScriptInteraction.GetScream()){
             if(ZoneTr.GetComponent<HideArea>() != null){
                 ScriptInteraction.HideMe();
             }else{
+                Debug.Log(ZoneTr.GetComponent<InteractionObject>().TagOfObject);
                 if(ZoneTr.GetComponent<InteractionObject>().TagOfObject == "Door"){
                     SoundManager.Instance.DoorLook();
+                    Jump = true;
                 }else{
                     Jump = true;
                 }
@@ -104,9 +106,21 @@ public class CharacterController : MonoBehaviour
     private float step =0;
     public void JumpFunc(){
         if(!MaxJump){
-            if(step >=0.3f){
-                step = thrust * Time.deltaTime;
-                transform.position = Vector2.MoveTowards(transform.position,new Vector2(transform.position.x,transform.position.y+0.6f) , step);
+            if(step <=0.2f){
+                step = 5 * Time.deltaTime;
+                transform.localPosition = Vector2.MoveTowards(transform.localPosition,new Vector2(transform.localPosition.x,transform.localPosition.y+0.2f) , step);
+            }else{
+                MaxJump = true;
+                step =0;
+            }
+        }else{
+            if(step <=0.2f){
+                step = 5 * Time.deltaTime;
+                transform.localPosition = Vector2.MoveTowards(transform.localPosition,new Vector2(transform.localPosition.x,transform.localPosition.y-0.2f) , step);
+            }else{
+                MaxJump = false;
+                step =0;
+                Jump = false;
             }
         }
     }
