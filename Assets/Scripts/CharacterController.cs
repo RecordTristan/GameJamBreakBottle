@@ -17,7 +17,7 @@ public class CharacterController : MonoBehaviour
     private Animator Anim;
     private bool Sens = false;
 
-    private GameObject ZoneTr;
+    public GameObject ZoneTr;
     private bool Jump = false;
     private bool MaxJump = false;
 
@@ -150,7 +150,7 @@ public class CharacterController : MonoBehaviour
             other.GetComponent<SceneObject>().DisactiveHighLight();
         }
         if(ZoneTr != null){
-            if(ZoneTr == other){
+            if(ZoneTr == other.gameObject){
                 ZoneTr = null;
             }
         }

@@ -2742,6 +2742,7 @@ MonoBehaviour:
   AugmentAfterScream: 1
   alphaDescending: 0.0001
   ColorOfObject: {r: 1, g: 1, b: 1, a: 0}
+  Speed: 6
 --- !u!114 &992659195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2760,6 +2761,7 @@ MonoBehaviour:
   thrust: 1.5
   thrustBase: 0
   thrustMax: 2
+  ZoneTr: {fileID: 0}
 --- !u!50 &992659196
 Rigidbody2D:
   serializedVersion: 4
@@ -3896,7 +3898,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1562676773
 Transform:
   m_ObjectHideFlags: 0
@@ -4845,6 +4847,7 @@ MonoBehaviour:
   ScriptPlayer: {fileID: 0}
   decorDrop: []
   StepFather: {fileID: 0}
+  fadeIn: {fileID: 0}
   MaxJauge: 10
   AddJauge: 0.6
   ReduceInTime: 0.01

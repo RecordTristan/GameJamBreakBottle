@@ -27,7 +27,7 @@ public class InteractionPlayer : MonoBehaviour
     public float alphaDescending = 0.05f;
 
     public Color ColorOfObject = new Color (1f,1f,1f,0f);
-
+    public float Speed=6;
     private bool ActivateScream = false;
     private float Adder = 0;
 
@@ -58,8 +58,8 @@ public class InteractionPlayer : MonoBehaviour
             ReduceCircle(ReducterOfTime);
         }
         MyAnxiety.transform.position = this.transform.position;
-        if(ActivateScream && Adder<=AugmentAfterScream){
-            Adder += 0.02f;
+        if(ActivateScream && Adder<AugmentAfterScream){
+            Adder += AugmentAfterScream/Speed;
             GameController.Instance.ScriptPlayer.AugmentCircle(Adder);
         }else{
             ActivateScream = false;
@@ -69,12 +69,14 @@ public class InteractionPlayer : MonoBehaviour
 
     public IEnumerator Scream()
     {
+        
         ScreamFinish = false;
+        SoundManager.Instance.ScreamSong();
         CameraManager.Instance.ShakeTime(TimeScream);
         yield return new WaitForSeconds(TimeScream);
+        ActivateScream = true;
         GameController.Instance.FirstCry = true;
         GameController.Instance.AugmentAlert();
-        SoundManager.Instance.ScreamSong();
         CreatePos();
         GameController.Instance.StepFather.onRound = false;
         GameController.Instance.StepFather.GoChild();
