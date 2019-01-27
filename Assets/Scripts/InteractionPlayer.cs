@@ -31,6 +31,8 @@ public class InteractionPlayer : MonoBehaviour
     private bool ActivateScream = false;
     private float Adder = 0;
 
+
+
     // Start is called before the first frame update
     void Start()
     {

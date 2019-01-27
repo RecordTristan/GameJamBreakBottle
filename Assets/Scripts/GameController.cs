@@ -18,6 +18,8 @@ public class GameController : MonoBehaviour
 
     public Image fadeIn;
     private bool fadeInActive = false;
+    public int fadeSpeed = 1;
+    private bool fadeOut;
 
     public float MaxJauge = 10;
     public float AddJauge = 2;
@@ -42,6 +44,7 @@ public class GameController : MonoBehaviour
     void Start()
     {
         ZoneTrigger = false;
+        fadeOut = true;
 
     }
 
@@ -52,14 +55,25 @@ public class GameController : MonoBehaviour
         if (fadeInActive) {
             Color tempColor = fadeIn.color;
             if (tempColor.a < 1) {
-                tempColor.a = tempColor.a + Time.deltaTime;
+                tempColor.a = tempColor.a + (Time.deltaTime * fadeSpeed);
                 fadeIn.color = tempColor;
             }
             else if (tempColor.a >= 1) {
                 fadeInActive = false;
                 StartCoroutine(Restart());
             }
-            
+        }
+        if (fadeOut) {
+            PlayerScript.enabled = false;
+            Color tempColor = fadeIn.color;
+            if (tempColor.a > 0) {
+                tempColor.a = tempColor.a - (Time.deltaTime * fadeSpeed);
+                fadeIn.color = tempColor;
+            }
+            else if (tempColor.a <= 0) {
+                fadeInActive = false;
+                PlayerScript.enabled = true;
+            }
         }
     }
 

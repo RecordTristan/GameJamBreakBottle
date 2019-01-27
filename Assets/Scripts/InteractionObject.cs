@@ -23,7 +23,7 @@ public class InteractionObject : SceneObject
     void Start()
     {
         //highLight();
-        Lightning = transform.GetChild(0).GetComponent<Light>();
+        // Lightning = transform.GetChild(0).GetComponent<Light>();
         if(GetComponent<Animator>() != null){
             Anim = GetComponent<Animator>();
         }

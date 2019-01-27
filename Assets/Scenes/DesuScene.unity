@@ -511,6 +511,7 @@ MonoBehaviour:
   AugmentAfterScream: 1
   alphaDescending: 0.0001
   ColorOfObject: {r: 1, g: 1, b: 1, a: 0}
+  Speed: 6
 --- !u!114 &638009544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,6 +530,7 @@ MonoBehaviour:
   thrust: 2
   thrustBase: 0
   thrustMax: 3
+  ZoneTr: {fileID: 0}
 --- !u!50 &638009545
 Rigidbody2D:
   serializedVersion: 4
@@ -850,7 +852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1710,6 +1712,7 @@ MonoBehaviour:
   decorDrop: []
   StepFather: {fileID: 0}
   fadeIn: {fileID: 1131816010}
+  fadeSpeed: 1
   MaxJauge: 10
   AddJauge: 2
   ReduceInTime: 0.01
