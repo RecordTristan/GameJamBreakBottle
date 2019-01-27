@@ -71,7 +71,7 @@ public class GameController : MonoBehaviour
                 fadeIn.color = tempColor;
             }
             else if (tempColor.a <= 0) {
-                fadeInActive = false;
+                fadeOut = false;
                 PlayerScript.enabled = true;
             }
         }

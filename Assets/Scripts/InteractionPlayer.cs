@@ -50,11 +50,6 @@ public class InteractionPlayer : MonoBehaviour
         {
             ReduceCircle(ReduceSizeStepFather);
         }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            ColliderPlayer.radius = MaxRangeCollider;
-            MyAnxiety.transform.localScale = MaxLightRange;
-        }
         if (!IsOnSafeArea)
         {
             ReduceCircle(ReducterOfTime);
@@ -71,7 +66,7 @@ public class InteractionPlayer : MonoBehaviour
 
     public IEnumerator Scream()
     {
-        
+        Debug.Log("OK");
         ScreamFinish = false;
         SoundManager.Instance.ScreamSong();
         CameraManager.Instance.ShakeTime(TimeScream);
