@@ -19,6 +19,7 @@ public class CharacterController : MonoBehaviour
 
     private GameObject ZoneTr;
     private bool Jump = false;
+    private bool MaxJump = false;
 
     // Start is called before the first frame update
     void Start()
@@ -100,9 +101,14 @@ public class CharacterController : MonoBehaviour
         
         
     }
-
+    private float step =0;
     public void JumpFunc(){
-
+        if(!MaxJump){
+            if(step >=0.3f){
+                step = thrust * Time.deltaTime;
+                transform.position = Vector2.MoveTowards(transform.position,new Vector2(transform.position.x,transform.position.y+0.6f) , step);
+            }
+        }
     }
     public void OnTriggerEnter2D(Collider2D other)
     {
