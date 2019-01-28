@@ -8,10 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MainMenu.unity
     guid: a35694c0c4016b942823344a5af292cd
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/DesuScene.unity
     guid: d3193d18d01ed374da36c6eca317d5cc
+  - enabled: 1
+    path: Assets/Scenes/Maixent.unity
+    guid: 5ae8e74e150538548b91f6916bf9d0ee
   m_configObjects: {}

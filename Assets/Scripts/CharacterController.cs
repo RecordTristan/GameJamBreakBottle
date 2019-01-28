@@ -42,17 +42,22 @@ public class CharacterController : MonoBehaviour
             StartCoroutine(ScriptInteraction.Scream());
         }
         if(Input.GetKeyDown(KeyCode.E)  && ScriptInteraction.GetScream()){
-            if(ZoneTr.GetComponent<HideArea>() != null){
+            if(ZoneTr != null){
+                if(ZoneTr.GetComponent<HideArea>() != null || GameController.Instance.ScriptPlayer.GetHidden()){
                 ScriptInteraction.HideMe();
-            }else{
-                Debug.Log(ZoneTr.GetComponent<InteractionObject>().TagOfObject);
-                if(ZoneTr.GetComponent<InteractionObject>().TagOfObject == "Door"){
-                    SoundManager.Instance.DoorLook();
-                    Jump = true;
                 }else{
-                    Jump = true;
+                    Debug.Log(ZoneTr.GetComponent<InteractionObject>().TagOfObject);
+                    if(ZoneTr.GetComponent<InteractionObject>().TagOfObject == "Door"){
+                        SoundManager.Instance.DoorLook();
+                        //Jump = true;
+                    }else{
+                        //Jump = true;
+                    }
                 }
+            }else if(GameController.Instance.ScriptPlayer.GetHidden()){
+                ScriptInteraction.HideMe();
             }
+            
             
         }
     }

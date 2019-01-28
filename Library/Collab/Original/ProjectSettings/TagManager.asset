@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Door
   - Switch
+  - BadBox
+  - GoodBox
+  - Hideout
   layers:
   - Default
   - TransparentFX
@@ -45,4 +48,13 @@ TagManager:
     locked: 0
   - name: Frontground
     uniqueID: 229151105
+    locked: 0
+  - name: Object
+    uniqueID: 3542181287
+    locked: 0
+  - name: Highlights
+    uniqueID: 1018623199
+    locked: 0
+  - name: Player
+    uniqueID: 4252019421
     locked: 0

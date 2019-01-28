@@ -109,7 +109,6 @@ public class InteractionPlayer : MonoBehaviour
             GetComponent<SpriteRenderer>().enabled = false;
             GetComponent<CircleCollider2D>().enabled = false;
             GetComponent<CapsuleCollider2D>().enabled = false;
-            
         }
     }
 
