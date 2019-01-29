@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour
 
     public CharacterController PlayerScript;
     public InteractionPlayer ScriptPlayer;
-    public List<GameObject> decorDrop = new List<GameObject>();
+    public GameObject[] decorDrop;
     public StepfatherScript StepFather;
 
     public Image fadeIn;
@@ -45,7 +45,7 @@ public class GameController : MonoBehaviour
     {
         ZoneTrigger = false;
         fadeOut = true;
-
+        decorDrop = GameObject.FindGameObjectsWithTag("B&W");
     }
 
     // Update is called once per frame

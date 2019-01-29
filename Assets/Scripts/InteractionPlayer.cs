@@ -133,9 +133,12 @@ public class InteractionPlayer : MonoBehaviour
         float Calcul = ColorOfObject.a + Reducter;
         if(Calcul>1){
             Calcul = 1;
+        }else if(Calcul <=0){
+            Calcul = 0;
         }
         ColorOfObject = new Color(1f, 1f, 1f, ColorOfObject.a + Reducter);
         foreach(GameObject items in GameController.Instance.decorDrop) {
+            Debug.Log(items.name);
             items.GetComponent<SpriteRenderer>().color = ColorOfObject;
         }
         

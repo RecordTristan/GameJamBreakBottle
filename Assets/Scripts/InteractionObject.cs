@@ -19,6 +19,7 @@ public class InteractionObject : SceneObject
     private SpriteRenderer sprAlpha;
 
     public string TagOfObject;
+    public Sprite NewObject;
 
     void Start()
     {
@@ -85,6 +86,7 @@ public class InteractionObject : SceneObject
             linkedBadbox.SetActive(false);
             SoundManager.Instance.LightSwitch();
         }
+        this.GetComponent<SpriteRenderer>().sprite = NewObject;
     }
 
     public override void highLight() {

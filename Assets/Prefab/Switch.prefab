@@ -101,6 +101,7 @@ MonoBehaviour:
   Lightning: {fileID: 0}
   Speed: 0
   TagOfObject: 
+  NewObject: {fileID: 21300002, guid: 82a1948952255bc498df740a937067de, type: 3}
 --- !u!61 &1073901422194947760
 BoxCollider2D:
   m_ObjectHideFlags: 0

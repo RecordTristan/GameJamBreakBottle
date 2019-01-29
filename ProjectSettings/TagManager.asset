@@ -9,6 +9,7 @@ TagManager:
   - BadBox
   - GoodBox
   - Hideout
+  - B&W
   layers:
   - Default
   - TransparentFX
@@ -43,8 +44,11 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Background
+  - name: BackgroundColor
     uniqueID: 4135898783
+    locked: 0
+  - name: BackgroundB&W
+    uniqueID: 1409999475
     locked: 0
   - name: Default
     uniqueID: 0
@@ -52,8 +56,11 @@ TagManager:
   - name: Frontground
     uniqueID: 229151105
     locked: 0
-  - name: Object
+  - name: ObjectColor
     uniqueID: 3542181287
+    locked: 0
+  - name: ObjectB&W
+    uniqueID: 2070243465
     locked: 0
   - name: Highlights
     uniqueID: 1018623199
