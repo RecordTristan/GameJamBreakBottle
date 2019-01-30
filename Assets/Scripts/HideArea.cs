@@ -60,11 +60,17 @@ public class HideArea : SceneObject
         }
         if(GameController.Instance.ScriptPlayer.GetHidden()){
             if(anim != null){
-                anim.SetBool("IsHiding",true);
+                anim.SetBool("isHiding",true);
+                if(transform.parent.childCount >1){
+                    transform.parent.GetChild(0).GetComponent<Animator>().SetBool("isHiding",true);
+                }
             }
         }else{
             if(anim != null){
-                anim.SetBool("IsHiding",false);
+                anim.SetBool("isHiding",false);
+                if(transform.parent.childCount >1){
+                    transform.parent.GetChild(0).GetComponent<Animator>().SetBool("isHiding",false);
+                }
             }
         }
     }

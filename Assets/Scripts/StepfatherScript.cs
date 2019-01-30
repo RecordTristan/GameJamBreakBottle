@@ -17,7 +17,7 @@ public class StepfatherScript : MonoBehaviour
     private Vector3 GoTo;
     private Vector3 GoToObj;
 
-    public GameObject gm;
+    public GameObject gm ;
     public bool iGoTo = false;
     public bool iGoAct = false;
     public bool Checker = true;
@@ -31,7 +31,17 @@ public class StepfatherScript : MonoBehaviour
     public bool notAvailable = false;
     private Animator Anim;
 
+    public float DistToActivObj;
+    private bool ActivObj;
+    public bool Scream;
+    private bool FirstDoor = false;
+    float step;
     public float DistanceOfRound = 10;
+
+    public AudioSource MySound;
+    public List<AudioClip> Walk;
+    int tracklistSFX = 0;
+    bool CwalkOnPlay = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -45,9 +55,10 @@ public class StepfatherScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DistanceTrigger ();
         if(!GameController.Instance.FirstCry)
             return;
+        
+        /* 
         if (iGoTo) {
             onRound = false;
             if (this.transform.position != GoTo) {
@@ -59,8 +70,8 @@ public class StepfatherScript : MonoBehaviour
                 }else{
                     transform.localScale = new Vector3(1,1,1);
                 }
-                if(gm != null){
-                    Destroy(gm);
+                if( != null){
+                    Destroy();
                 }
             }
             else {
@@ -113,6 +124,45 @@ public class StepfatherScript : MonoBehaviour
                     roundPlace = 0;
                 }
             }
+        }*/
+        if(GoTo != Vector3.zero){
+            step = spdChase * Time.deltaTime;
+            Anim.SetBool("Walk",true);
+            float DistToObj = Vector2.Distance(this.transform.position,new Vector2(GoTo.x,transform.position.y));
+            if(DistToActivObj < DistToObj){
+                if(CwalkOnPlay){
+                    CwalkOnPlay = true;
+                    StartCoroutine(DFootsteps());
+                }
+                transform.position = Vector2.MoveTowards(transform.position,new Vector2(GoTo.x,transform.position.y) , step);
+            }
+        }
+        if (this.transform.position.x < GoTo.x){
+            transform.localScale = new Vector3(1,1,1);
+            lookinAt = true;
+        } 
+        else{
+            transform.localScale = new Vector3(-1,1,1);
+            lookinAt = false;
+        }
+        
+        if(ActivObj){
+            float DistToObj = Vector2.Distance(this.transform.position,new Vector2(GoTo.x,transform.position.y));
+            if(DistToActivObj >= DistToObj){
+                GoTo = Vector3.zero;
+                StartCoroutine(Activate());
+            }
+        }
+        if(lastSeen != Vector2.zero){
+            float DistToObj = Vector2.Distance(this.transform.position,new Vector2(GoTo.x,transform.position.y));
+            if(DistToActivObj >= DistToObj){
+                if (lookinAt){
+                    GoTo = rondoPoints[1];
+                } 
+                else{
+                    GoTo = rondoPoints[0];
+                }
+            }
         }
 
         if (Checker) {
@@ -122,82 +172,97 @@ public class StepfatherScript : MonoBehaviour
             this.transform.GetChild(0).GetComponent<CircleCollider2D>().enabled = false;
         }
         DistanceTrigger ();
-
-        // Liste des rondes ici:
-
-       
+        // Liste des rondes ici       
+    }
+    IEnumerator DFootsteps() {
+        MySound.PlayOneShot(Walk[tracklistSFX]);
+        yield return new WaitForSeconds(0.5f);
+        tracklistSFX ++;
+        if (tracklistSFX >= 2) {
+            tracklistSFX = 0;
+        }
+        CwalkOnPlay = false;
     }
 
+    public void ChildScream(){
+        lastSeen = GameController.Instance.PlayerScript.transform.position;
+        Scream = true;
+    }
     public void GoChild()
     {
         onRound = false;
         GoTo = new Vector2(GameController.Instance.ScriptPlayer.transform.position.x,transform.position.y);
-        if (this.transform.position.x < GoTo.x)
-            lookinAt = true;
-        else
-            lookinAt = false;
         iGoTo = true;
+        lastSeen = Vector2.zero;
     }
 
     private void OnTriggerEnter2D (Collider2D other) {
-        if(other.gameObject == gm){
-            Debug.Log("Hello");
-            iGoTo = true;
-        }else{
-            Debug.Log(Checker && other.GetComponent<InteractionObject>() != null);
-            if (other.GetComponent<InteractionObject>() != null && iGoTo && !other.GetComponent<InteractionObject>().Active && !notAvailable) {
-                iGoTo = false;
-                notAvailable = true;
-                lastObj = other.gameObject;
-                GoToObj = other.transform.position;
-                iGoAct = true;
-                pauseChase = true;
-                Debug.Log("Je vais ouvrir une porte");
-            }else if (Checker && other.GetComponent<InteractionObject>() != null && !other.GetComponent<InteractionObject>().Active && !notAvailable) {
-                lastObj = other.gameObject;
-                notAvailable = true;
-                GoToObj = lastObj.transform.position;
-                iGoAct = true;
-                Checker = false;
-                Debug.Log("Je vais ouvrir un switch");
-            }
+        if (other.GetComponent<InteractionObject>() != null && !other.GetComponent<InteractionObject>().Active && (GoTo == Vector3.zero || Scream) && !ActivObj) {
+            iGoTo = false;
+            notAvailable = true;
+            lastObj = other.gameObject;
+            GoTo = other.transform.position;
+            iGoAct = true;
+            pauseChase = true;
+            ActivObj = true;
+            Debug.Log("Je vais ouvrir une porte");
+        }else if (other.GetComponent<InteractionObject>() != null && !other.GetComponent<InteractionObject>().Active  && (GoTo == Vector3.zero || Scream) && !ActivObj) {
+            lastObj = other.gameObject;
+            notAvailable = true;
+            GoTo = lastObj.transform.position;
+            iGoAct = true;
+            Checker = false;
+            ActivObj = true;
+            Debug.Log("Je vais ouvrir un switch");
         }
     }
 
     private void DistanceTrigger () {
         DistancePlayerFather = Vector2.Distance(transform.position,GameController.Instance.PlayerScript.transform.position);
-        if(DistancePlayerFather <= DistanceToReact && !notAvailable && !GameController.Instance.ScriptPlayer.GetHidden()){
-            SoundManager.Instance.ISpotYou();
-            GoChild();
-            spdChase = SpeedCap;
+        if(DistancePlayerFather <= DistanceToReact && !GameController.Instance.ScriptPlayer.GetHidden()){
+            if(!ActivObj && FirstDoor){
+                SoundManager.Instance.ISpotYou();
+                GoChild();
+                spdChase = SpeedCap;
+                Scream = false;
+            }
             GameController.Instance.FirstCry = true;
             GameController.Instance.SpeedBoost();
+            
         }
         else {
-            lastSeen = GameController.Instance.PlayerScript.transform.position;
-            GameController.Instance.ReduceBoost();
+            if(lastSeen == Vector2.zero && !Scream && !ActivObj){
+                Scream = true;
+                lastSeen = GameController.Instance.PlayerScript.transform.position;
+                GameController.Instance.ReduceBoost();
+                WhatUDo();
+            }
         }
-        
     }
     private void OnTriggerExit2D (Collider2D other) {
-        if(other.tag == "Player"){
-            GameController.Instance.ReduceBoost();
+    }
+
+    private void WhatUDo(){
+        rondoPoints.Clear();
+        rondoPoints.Add(new Vector2(lastSeen.x+DistanceOfRound,transform.position.y));
+        rondoPoints.Add(new Vector2(lastSeen.x-DistanceOfRound,transform.position.y));
+        if (lookinAt){
+            GoTo = rondoPoints[0];
+        } 
+        else{
+            GoTo = rondoPoints[1];
         }
     }
 
     public IEnumerator Activate() {
         InteractionObject objScript = lastObj.GetComponent<InteractionObject>();
-        Debug.Log("J'ouvre la porte");
         Anim.SetBool("Activate",true);
-        yield return new WaitForSeconds(0.5f);
+        FirstDoor = true;
+        yield return new WaitForSeconds(0.7f);
+        ActivObj = false;
         objScript.objActive();
         lastObj = null;
         Anim.SetBool("Activate",false);
-        if (pauseChase) {
-            pauseChase = false;
-            notAvailable = false;
-            iGoTo = true;
-        }
-        SoundManager.Instance.DoorOpen();
+        WhatUDo();
     }
 }

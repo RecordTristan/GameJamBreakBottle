@@ -21,6 +21,10 @@ public class CharacterController : MonoBehaviour
     private bool Jump = false;
     private bool MaxJump = false;
 
+    public AudioSource MySound;
+    public List<AudioClip> Walk;
+    int tracklistSFX = 0;
+    bool CwalkOnPlay = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -67,6 +71,10 @@ public class CharacterController : MonoBehaviour
             return;
         if(ScriptInteraction.CanMove()){
             if((Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)) || (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.Q))){
+                if(!CwalkOnPlay){
+                    CwalkOnPlay = true;
+                    StartCoroutine(CFootSteps());
+                }
                 if ((Input.GetKey(KeyCode.RightArrow)|| Input.GetKey(KeyCode.D)) && ScriptInteraction.CanMove())
                 {
                     if(Sens){
@@ -108,6 +116,17 @@ public class CharacterController : MonoBehaviour
         
         
     }
+
+    IEnumerator CFootSteps() {
+        MySound.PlayOneShot(Walk[tracklistSFX]);
+        yield return new WaitForSeconds(0.7f);
+        tracklistSFX ++;
+        if (tracklistSFX >= 2) {
+            tracklistSFX = 0;
+        }
+        CwalkOnPlay = false;
+    }
+
     private float step =0;
     public void JumpFunc(){
         if(!MaxJump){

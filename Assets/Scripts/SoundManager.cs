@@ -64,18 +64,6 @@ public class SoundManager : MonoBehaviour
     void Update()
     {
         UpdateCreapySound();
-        if (childWalk) {
-            if(!CwalkOnPlay) {
-                CwalkOnPlay = true;
-                StartCoroutine(CFootSteps());
-            }
-        }
-        if (dadWalk) {
-            if (!DwalkOnPlay) {
-                DwalkOnPlay = true;
-                StartCoroutine(DFootsteps());
-            }
-        }
 
     }
 

@@ -23,9 +23,8 @@ public class CameraManager : MonoBehaviour {
     bool ActiveSpe = false;
     // Use this for initialization
     void Start () {
-        Debug.Log(this.transform.localPosition.y);
         Height = 0.3f;
-        this.transform.localPosition = new Vector3(GameController.Instance.ScriptPlayer.transform.position.x,Height,-10);
+        //this.transform.localPosition = new Vector3(GameController.Instance.ScriptPlayer.transform.position.x,Height,-10);
         
         originalPos = this.transform.localPosition;
 	}
@@ -58,7 +57,7 @@ public class CameraManager : MonoBehaviour {
                 Shake(MagnPlus);
             }
         }else{
-            TimerMoveCam = 0.02f;
+            TimerMoveCam = SpeedMove * Time.deltaTime;
             transform.localPosition = Vector3.Lerp(transform.localPosition, new Vector3(GameController.Instance.ScriptPlayer.transform.position.x,Height,-10),TimerMoveCam);          
         }
 	}

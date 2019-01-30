@@ -75,7 +75,7 @@ public class InteractionPlayer : MonoBehaviour
         GameController.Instance.FirstCry = true;
         GameController.Instance.AugmentAlert();
         CreatePos();
-        GameController.Instance.StepFather.onRound = false;
+        GameController.Instance.StepFather.ChildScream();
         GameController.Instance.StepFather.GoChild();
         ScreamFinish = true;
     }
@@ -123,6 +123,7 @@ public class InteractionPlayer : MonoBehaviour
 
     public void ReduceCircle(float Reducter)
     {
+        Debug.Log(Reducter);
         if(MyAnxiety.transform.localScale.x >=3.7f){
             ColliderPlayer.radius -= Reducter;
             MyAnxiety.transform.localScale = new Vector3(MyAnxiety.transform.localScale.x - Reducter * 20,MyAnxiety.transform.localScale.y - Reducter * 20,MyAnxiety.transform.localScale.z - Reducter * 20);
@@ -130,15 +131,14 @@ public class InteractionPlayer : MonoBehaviour
         else {
             GameController.Instance.GameOver();
         }
-        float Calcul = ColorOfObject.a + Reducter;
+        float Calcul = 1 - ((MyAnxiety.transform.localScale.x-3.7f)/(MaxLightRange.x-3.7f));
         if(Calcul>1){
             Calcul = 1;
         }else if(Calcul <=0){
             Calcul = 0;
         }
-        ColorOfObject = new Color(1f, 1f, 1f, ColorOfObject.a + Reducter);
+        ColorOfObject = new Color(1f, 1f, 1f, Calcul);
         foreach(GameObject items in GameController.Instance.decorDrop) {
-            Debug.Log(items.name);
             items.GetComponent<SpriteRenderer>().color = ColorOfObject;
         }
         
@@ -153,11 +153,13 @@ public class InteractionPlayer : MonoBehaviour
             ColliderPlayer.radius = MaxRangeCollider;
             MyAnxiety.transform.localScale = MaxLightRange;
         }
-        float Calcul = ColorOfObject.a - Augmenter;
-        if(Calcul<0){
+        float Calcul = 1 - (MyAnxiety.transform.localScale.x/MaxLightRange.x);
+        if(Calcul>1){
+            Calcul = 1;
+        }else if(Calcul <=0){
             Calcul = 0;
         }
-        ColorOfObject = new Color(1f, 1f, 1f, ColorOfObject.a - Augmenter);
+        ColorOfObject = new Color(1f, 1f, 1f, Calcul);
         foreach(GameObject items in GameController.Instance.decorDrop) {
             items.GetComponent<SpriteRenderer>().color = ColorOfObject;
         }

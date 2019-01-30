@@ -39,7 +39,6 @@ public class InteractionObject : SceneObject
     {
         
         if(Activate){
-            Debug.Log("Hey");
            if (onLights && !noLights) {
                 if(Sens){
                     if (sprAlpha.color.a <62) {
@@ -75,14 +74,13 @@ public class InteractionObject : SceneObject
     public void objActive() {
         Active = true;
         if (this.tag == "Door") {
-            Debug.Log("Im unlocked");
+            SoundManager.Instance.DoorOpen();
             if(GetComponent<Animator>() != null){
                 Anim.SetBool("Open",true);
             }
             this.GetComponent<BoxCollider2D>().enabled = false;
         }
         else if (this.tag == "Switch") {
-            Debug.Log("je désactive cette zone de FDP");
             linkedBadbox.SetActive(false);
             SoundManager.Instance.LightSwitch();
         }
