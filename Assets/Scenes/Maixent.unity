@@ -7056,15 +7056,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TimeScream: 1
-  ReducterOfTime: 0.0001
-  MaxLightRange: {x: 0, y: 0, z: 0}
+  ReducterOfTime: 10
+  MaxLightRange: {x: 0, y: 0}
   MaxRangeCollider: 0
-  ReduceSizeStepFather: 0.0003
+  ReduceSizeStepFather: 10
   LocPos: {fileID: 2198058574066404938, guid: 74dc859f83beafe4cb1b3a0ba57ca65f, type: 3}
-  AugmentAfterScream: 0.02
+  AugmentAfterScream: 50
   alphaDescending: 0.001
   ColorOfObject: {r: 1, g: 1, b: 1, a: 0}
   Speed: 6
+  speedOfAnxiety: 2
 --- !u!114 &992659195
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7079,6 +7080,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ScriptInteraction: {fileID: 992659194}
   rbChara: {fileID: 0}
+  MaxLife: 1000
+  CurrentLife: 1000
   PerteLum: 1
   thrust: 1.5
   thrustBase: 0
@@ -12036,7 +12039,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1562676773
 Transform:
   m_ObjectHideFlags: 0

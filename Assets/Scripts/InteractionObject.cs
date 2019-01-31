@@ -82,7 +82,7 @@ public class InteractionObject : SceneObject
         }
         else if (this.tag == "Switch") {
             linkedBadbox.SetActive(false);
-            SoundManager.Instance.LightSwitch();
+            //SoundManager.Instance.LightSwitch();
         }
         this.GetComponent<SpriteRenderer>().sprite = NewObject;
     }

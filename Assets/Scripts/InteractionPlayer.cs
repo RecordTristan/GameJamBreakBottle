@@ -8,7 +8,7 @@ public class InteractionPlayer : MonoBehaviour
     private bool ScreamFinish = true;
 
     public float ReducterOfTime = 0.0001f;
-    public Vector3 MaxLightRange;
+    public Vector2 MaxLightRange;
     public float MaxRangeCollider;
 
     public float ReduceSizeStepFather = 0.005f;
@@ -31,6 +31,7 @@ public class InteractionPlayer : MonoBehaviour
     private bool ActivateScream = false;
     private float Adder = 0;
 
+    public float speedOfAnxiety = 2;
 
 
     // Start is called before the first frame update
@@ -48,20 +49,14 @@ public class InteractionPlayer : MonoBehaviour
     {
         if (ReduceCollider)
         {
-            ReduceCircle(ReduceSizeStepFather);
+            ReduceCircle(ReduceSizeStepFather*Time.deltaTime);
         }
         if (!IsOnSafeArea)
         {
-            ReduceCircle(ReducterOfTime);
+            ReduceCircle(ReducterOfTime*Time.deltaTime);
         }
         MyAnxiety.transform.position = this.transform.position;
-        if(ActivateScream && Adder<AugmentAfterScream){
-            Adder += AugmentAfterScream/Speed;
-            GameController.Instance.ScriptPlayer.AugmentCircle(Adder);
-        }else{
-            ActivateScream = false;
-            Adder=0;
-        }
+        MyAnxiety.transform.localScale = Vector2.Lerp(MyAnxiety.transform.localScale,MaxLightRange*(GameController.Instance.PlayerScript.CurrentLife/GameController.Instance.PlayerScript.MaxLife)+new Vector2(3.75f,3.75f),speedOfAnxiety*Time.deltaTime);
     }
 
     public IEnumerator Scream()
@@ -123,15 +118,13 @@ public class InteractionPlayer : MonoBehaviour
 
     public void ReduceCircle(float Reducter)
     {
-        Debug.Log(Reducter);
-        if(MyAnxiety.transform.localScale.x >=3.7f){
-            ColliderPlayer.radius -= Reducter;
-            MyAnxiety.transform.localScale = new Vector3(MyAnxiety.transform.localScale.x - Reducter * 20,MyAnxiety.transform.localScale.y - Reducter * 20,MyAnxiety.transform.localScale.z - Reducter * 20);
+        if(GameController.Instance.PlayerScript.CurrentLife >=0){
+            GameController.Instance.PlayerScript.CurrentLife -= Reducter;
         }
         else {
             GameController.Instance.GameOver();
         }
-        float Calcul = 1 - ((MyAnxiety.transform.localScale.x-3.7f)/(MaxLightRange.x-3.7f));
+        float Calcul = 1 - (GameController.Instance.PlayerScript.CurrentLife/GameController.Instance.PlayerScript.MaxLife);
         if(Calcul>1){
             Calcul = 1;
         }else if(Calcul <=0){
@@ -145,15 +138,13 @@ public class InteractionPlayer : MonoBehaviour
     }
     public void AugmentCircle(float Augmenter)
     {
-        if(MyAnxiety.transform.localScale.x <= MaxLightRange.x){
-            ColliderPlayer.radius += Augmenter;
-            MyAnxiety.transform.localScale = new Vector3(MyAnxiety.transform.localScale.x + Augmenter * 20,MyAnxiety.transform.localScale.y + Augmenter * 20,MyAnxiety.transform.localScale.z + Augmenter * 20);
+        if(GameController.Instance.PlayerScript.CurrentLife <= GameController.Instance.PlayerScript.MaxLife){
+            GameController.Instance.PlayerScript.CurrentLife += Augmenter;
         }
-        if(MyAnxiety.transform.localScale.x > MaxLightRange.x){
-            ColliderPlayer.radius = MaxRangeCollider;
-            MyAnxiety.transform.localScale = MaxLightRange;
+        if(GameController.Instance.PlayerScript.CurrentLife > GameController.Instance.PlayerScript.MaxLife){
+            GameController.Instance.PlayerScript.CurrentLife = GameController.Instance.PlayerScript.MaxLife;
         }
-        float Calcul = 1 - (MyAnxiety.transform.localScale.x/MaxLightRange.x);
+        float Calcul = 1 - (GameController.Instance.PlayerScript.CurrentLife/GameController.Instance.PlayerScript.MaxLife);
         if(Calcul>1){
             Calcul = 1;
         }else if(Calcul <=0){

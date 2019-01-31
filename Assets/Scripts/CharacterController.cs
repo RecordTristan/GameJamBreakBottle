@@ -9,6 +9,9 @@ public class CharacterController : MonoBehaviour
     
     public Rigidbody2D rbChara;
 
+    public float MaxLife = 1000;
+    public float CurrentLife = 1000;
+
     public float PerteLum;
     public float thrust;
     public float thrustBase;
