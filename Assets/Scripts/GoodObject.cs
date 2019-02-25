@@ -32,6 +32,12 @@ public class GoodObject : MonoBehaviour
         if(other.tag == "Player" && !other.isTrigger){
             Activate = true;
             SoundManager.Instance.SafeSound();
+            Debug.Log("OK");
+        }
+    }
+    public void OnTriggerStay2D(Collider2D other){
+        if(other.tag == "Player" && !other.isTrigger){
+            Activate = true;
         }
     }
     public void OnTriggerExit2D(Collider2D other){

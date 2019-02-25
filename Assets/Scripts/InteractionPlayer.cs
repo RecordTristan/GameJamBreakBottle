@@ -61,7 +61,6 @@ public class InteractionPlayer : MonoBehaviour
 
     public IEnumerator Scream()
     {
-        Debug.Log("OK");
         ScreamFinish = false;
         SoundManager.Instance.ScreamSong();
         CameraManager.Instance.ShakeTime(TimeScream);
@@ -134,7 +133,9 @@ public class InteractionPlayer : MonoBehaviour
         foreach(GameObject items in GameController.Instance.decorDrop) {
             items.GetComponent<SpriteRenderer>().color = ColorOfObject;
         }
-        
+        if(GameController.Instance.PlayerScript.CurrentLife<=0){
+            GameController.Instance.GameOver();
+        }
     }
     public void AugmentCircle(float Augmenter)
     {

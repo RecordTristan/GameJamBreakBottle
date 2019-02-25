@@ -34,6 +34,11 @@ public class BadObject : MonoBehaviour
             SoundManager.Instance.UnsafeSound();
         }
     }
+    public void OnTriggerStay2D(Collider2D other){
+        if(other.tag == "Player" && !other.isTrigger){
+            Activate = true;
+        }
+    }
     public void OnTriggerExit2D(Collider2D other){
         if(other.tag == "Player" && !other.isTrigger){
             Activate = false;

@@ -62,7 +62,6 @@ public class StepfatherScript : MonoBehaviour
             step = spdChase * Time.deltaTime;
             Anim.SetBool("Walk",true);
             float DistToObj = Vector2.Distance(this.transform.position,new Vector2(GoTo.x,transform.position.y));
-            Debug.Log(DistToObj);
             if(DistToActivObj < DistToObj){
                 if(CwalkOnPlay){
                     CwalkOnPlay = true;
@@ -79,7 +78,7 @@ public class StepfatherScript : MonoBehaviour
             transform.localScale = new Vector3(-1,1,1);
             lookinAt = false;
         }
-        
+
         if(ActivObj){
             float DistToObj = Vector2.Distance(this.transform.position,new Vector2(GoTo.x,transform.position.y));
             if(DistToActivObj >= DistToObj){
@@ -87,7 +86,18 @@ public class StepfatherScript : MonoBehaviour
                 StartCoroutine(Activate());
             }
         }
+
         if(lastSeen != Vector2.zero && GameController.Instance.ScriptPlayer.GetHidden()){
+            float DistToObj = Vector2.Distance(this.transform.position,new Vector2(GoTo.x,transform.position.y));
+            if(DistToActivObj >= DistToObj){
+                if (lookinAt){
+                    GoTo = rondoPoints[1];
+                } 
+                else{
+                    GoTo = rondoPoints[0];
+                }
+            }
+        }else if(lastSeen != Vector2.zero){
             float DistToObj = Vector2.Distance(this.transform.position,new Vector2(GoTo.x,transform.position.y));
             if(DistToActivObj >= DistToObj){
                 if (lookinAt){
@@ -131,20 +141,17 @@ public class StepfatherScript : MonoBehaviour
                 GoTo = rondoPoints[1];
             }
         }
-        
     }
 
     private void OnTriggerEnter2D (Collider2D other) {
-        if (other.GetComponent<InteractionObject>() != null && !other.GetComponent<InteractionObject>().Active && (GoTo == Vector3.zero || Scream) && !ActivObj && other.tag == "Door") {
-            iGoTo = false;
+        if (other.GetComponent<InteractionObject>() != null && !other.GetComponent<InteractionObject>().Active && (Scream) && !ActivObj && other.tag == "Door") {
             notAvailable = true;
             lastObj = other.gameObject;
-            GoTo = other.transform.position;
+            GoTo = lastObj.transform.position;
             iGoAct = true;
-            pauseChase = true;
             ActivObj = true;
             Debug.Log("Je vais ouvrir une porte");
-        }else if (other.GetComponent<InteractionObject>() != null && !other.GetComponent<InteractionObject>().Active  && (GoTo == Vector3.zero || Scream) && !ActivObj && other.tag == "Switch") {
+        }else if (other.GetComponent<InteractionObject>() != null && !other.GetComponent<InteractionObject>().Active && !ActivObj && other.tag == "Switch") {
             lastObj = other.gameObject;
             notAvailable = true;
             GoTo = lastObj.transform.position;
@@ -156,7 +163,6 @@ public class StepfatherScript : MonoBehaviour
 
     private void DistanceTrigger () {
         DistancePlayerFather = Vector2.Distance(transform.position,GameController.Instance.PlayerScript.transform.position);
-        Debug.Log(DistancePlayerFather <= DistanceToReact && !GameController.Instance.ScriptPlayer.GetHidden() );
         if(DistancePlayerFather <= DistanceToReact && !GameController.Instance.ScriptPlayer.GetHidden() ){
             if(!ActivObj && FirstDoor){
                 SoundManager.Instance.ISpotYou();
@@ -165,23 +171,20 @@ public class StepfatherScript : MonoBehaviour
                 Scream = false;
             }
             GameController.Instance.SpeedBoost();
-            
         }
         else {
             if(lastSeen == Vector2.zero && !Scream && !ActivObj){
-                Scream = true;
                 GameController.Instance.ReduceBoost();
                 WhatUDo();
             }
         }
-    }
-    private void OnTriggerExit2D (Collider2D other) {
     }
 
     private void WhatUDo(){
         rondoPoints.Clear();
         if(!Scream){
             lastSeen = GameController.Instance.PlayerScript.transform.position;
+            GoTo = lastSeen;
             rondoPoints.Add(new Vector2(lastSeen.x+DistanceOfRound,transform.position.y));
             rondoPoints.Add(new Vector2(lastSeen.x-DistanceOfRound,transform.position.y));
             if( GameController.Instance.ScriptPlayer.GetHidden()){
@@ -194,6 +197,16 @@ public class StepfatherScript : MonoBehaviour
             }
         }else{
             GoTo = lastSeen;
+            rondoPoints.Add(new Vector2(lastSeen.x+DistanceOfRound,transform.position.y));
+            rondoPoints.Add(new Vector2(lastSeen.x-DistanceOfRound,transform.position.y));
+            if( GameController.Instance.ScriptPlayer.GetHidden()){
+                if (lookinAt){
+                    GoTo = rondoPoints[0];
+                } 
+                else{
+                    GoTo = rondoPoints[1];
+                }
+            }
         }
         
     }

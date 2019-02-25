@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 484588395479172960}
   - component: {fileID: 2728209226860946149}
   - component: {fileID: 421716261114204264}
+  - component: {fileID: 5615894396925804674}
   m_Layer: 0
   m_Name: HideZone
   m_TagString: Untagged
@@ -204,3 +205,22 @@ MonoBehaviour:
   cloneLight: {fileID: 0}
   Lightning: {fileID: 0}
   Speed: 0
+--- !u!95 &5615894396925804674
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8866525777941453895}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 46f30f097e65c9b4daa4c10fec1d3fc0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

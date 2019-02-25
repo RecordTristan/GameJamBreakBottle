@@ -61,14 +61,8 @@ public class InteractionObject : SceneObject
                         Sens = true;
                     }
                 }
-                
-                
             }
         }
-
-        
-        
-        
     }
 
     public void objActive() {

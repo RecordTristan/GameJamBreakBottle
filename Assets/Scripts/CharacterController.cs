@@ -64,8 +64,9 @@ public class CharacterController : MonoBehaviour
             }else if(GameController.Instance.ScriptPlayer.GetHidden()){
                 ScriptInteraction.HideMe();
             }
-            
-            
+        }
+        if(CurrentLife <=0){
+            GameController.Instance.GameOver();
         }
     }
     void FixedUpdate()

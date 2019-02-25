@@ -32,7 +32,6 @@ public class HideArea : SceneObject
            if (onLights && !noLights) {
                 if(Sens){
                     if (TimerLight < 0.1f) {
-                        Debug.Log(TimerLight);
                         TimerLight += Speed * Time.deltaTime;
                         float alphaSprite = sprAlpha.color.a;
                         alphaSprite = Mathf.Lerp(alphaSprite,120f/255f,TimerLight);
